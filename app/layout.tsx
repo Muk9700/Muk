@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "nailart",
-  description: "Thumbnail Generator",
+  title: "BL 소설 생성기",
+  description: "AI 기반 BL 단편 소설 생성 서비스",
 };
 
 export default function RootLayout({

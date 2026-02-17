@@ -141,12 +141,12 @@ export default function Home() {
       `}</style>
 
       <AetherHero
-        title="Transform Your Photos with GayArt AI"
-        subtitle="Upload your portrait and let our AI create stunning, attractive transformations. Enhance your look with confidence and style."
-        ctaLabel="Upload Photo"
-        ctaHref="#upload"
-        secondaryCtaLabel="See Examples"
-        secondaryCtaHref="#examples"
+        title="BL 소설 생성 AI"
+        subtitle="장르, 성격, 컨셉만 넣으면 당신만의 특별한 BL 단편 소설을 만들어드립니다. 지금 바로 시작해보세요."
+        ctaLabel="소설 쓰러 가기"
+        ctaHref="/dashboard"
+        secondaryCtaLabel="둘러보기"
+        secondaryCtaHref="#how-it-works"
       />
 
       {/* Feature highlights with custom SVG */}
@@ -177,7 +177,7 @@ export default function Home() {
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: '2rem',
           }}>
-            {/* Step 1: Upload */}
+            {/* Step 1: Input */}
             <div style={{
               background: 'rgba(255,255,255,0.03)',
               borderRadius: 16,
@@ -199,10 +199,10 @@ export default function Home() {
                 </svg>
               </div>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.75rem' }}>
-                1. Upload Your Photo
+                1. 정보 입력
               </h3>
               <p style={{ opacity: 0.8, lineHeight: 1.6, margin: 0 }}>
-                Simply upload a portrait photo. Our AI works best with clear, front-facing images.
+                장르, 주인공 성격, 그리고 원하는 소설의 컨셉을 자유롭게 입력해주세요.
               </p>
             </div>
 
@@ -231,14 +231,14 @@ export default function Home() {
                 </svg>
               </div>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.75rem' }}>
-                2. AI Enhancement
+                2. AI 소설 생성
               </h3>
               <p style={{ opacity: 0.8, lineHeight: 1.6, margin: 0 }}>
-                Our advanced AI analyzes and enhances facial features, style, and overall aesthetics.
+                Gemini 1.5 Flash 엔진이 입력된 정보를 바탕으로 감성적인 BL 단편 소설을 집필합니다.
               </p>
             </div>
 
-            {/* Step 3: Download */}
+            {/* Step 3: View & Save */}
             <div style={{
               background: 'rgba(255,255,255,0.03)',
               borderRadius: 16,
@@ -269,10 +269,10 @@ export default function Home() {
                 </svg>
               </div>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.75rem' }}>
-                3. Get Your Results
+                3. 감상 및 저장
               </h3>
               <p style={{ opacity: 0.8, lineHeight: 1.6, margin: 0 }}>
-                Download your transformed photo in high quality. Share with confidence!
+                생성된 소설을 읽고 클립보드에 복사하여 간직하세요.
               </p>
             </div>
           </div>

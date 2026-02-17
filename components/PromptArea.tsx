@@ -216,236 +216,158 @@ export const PromptBox = React.forwardRef<
     HTMLTextAreaElement,
     React.TextareaHTMLAttributes<HTMLTextAreaElement>
 >(({ className, ...props }, ref) => {
-    const internalTextareaRef = React.useRef<HTMLTextAreaElement>(null);
-    const fileInputRef = React.useRef<HTMLInputElement>(null);
-    const [value, setValue] = React.useState("");
-    const [imagePreview, setImagePreview] = React.useState<string | null>(null);
-    const [selectedTool, setSelectedTool] = React.useState<string | null>(null);
-    const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
-    const [isImageDialogOpen, setIsImageDialogOpen] = React.useState(false);
+    const [genre, setGenre] = React.useState("");
+    const [personality, setPersonality] = React.useState("");
+    const [concept, setConcept] = React.useState("");
+    const [isGenerating, setIsGenerating] = React.useState(false);
+    const [generatedStory, setGeneratedStory] = React.useState<string | null>(null);
+    const [error, setError] = React.useState<string | null>(null);
 
-    React.useImperativeHandle(ref, () => internalTextareaRef.current!, []);
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-    React.useLayoutEffect(() => {
-        const textarea = internalTextareaRef.current;
-        if (textarea) {
-            textarea.style.height = "auto";
-            const newHeight = Math.min(textarea.scrollHeight, 200);
-            textarea.style.height = `${newHeight}px`;
+        if (!genre.trim() || !personality.trim() || !concept.trim()) {
+            setError("모든 필드를 입력해주세요.");
+            return;
         }
-    }, [value]);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setValue(e.target.value);
-        if (props.onChange) props.onChange(e);
-    };
+        setIsGenerating(true);
+        setError(null);
+        setGeneratedStory(null);
 
-    const handlePlusClick = () => {
-        fileInputRef.current?.click();
-    };
+        try {
+            const response = await fetch('/api/generate-story', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    genre,
+                    personality,
+                    concept,
+                }),
+            });
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file && file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result as string);
-            };
-            reader.readAsDataURL(file);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to generate story');
+            }
+
+            setGeneratedStory(data.story);
+        } catch (err: any) {
+            console.error('Error generating story:', err);
+            setError(err.message || '소설 생성 중 오류가 발생했습니다.');
+        } finally {
+            setIsGenerating(false);
         }
-        event.target.value = "";
     };
-
-    const handleRemoveImage = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation();
-        setImagePreview(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
-        }
-    };
-
-    const hasValue = value.trim().length > 0 || imagePreview;
-    const activeTool = selectedTool ? toolsList.find(t => t.id === selectedTool) : null;
-    const ActiveToolIcon = activeTool?.icon;
 
     return (
-        <div className={cn(
-            "flex flex-col rounded-[28px] p-2 shadow-sm transition-colors bg-white border dark:bg-[#303030] dark:border-transparent cursor-text",
-            className
-        )}>
-            <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                className="hidden"
-                accept="image/*"
-            />
-
-            {imagePreview && (
-                <Dialog open={isImageDialogOpen} onOpenChange={setIsImageDialogOpen}>
-                    <div className="relative mb-1 w-fit rounded-[1rem] px-1 pt-1">
-                        <button
-                            type="button"
-                            className="transition-transform"
-                            onClick={() => setIsImageDialogOpen(true)}
-                        >
-                            <img
-                                src={imagePreview}
-                                alt="Image preview"
-                                className="h-14.5 w-14.5 rounded-[1rem]"
-                            />
-                        </button>
-                        <button
-                            onClick={handleRemoveImage}
-                            className="absolute right-2 top-2 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-white/50 dark:bg-[#303030] text-black dark:text-white transition-colors hover:bg-accent dark:hover:bg-[#515151]"
-                            aria-label="Remove image"
-                        >
-                            <XIcon className="h-4 w-4" />
-                        </button>
-                    </div>
-                    <DialogContent>
-                        <img
-                            src={imagePreview}
-                            alt="Full size preview"
-                            className="w-full max-h-[95vh] object-contain rounded-[24px]"
+        <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto">
+            <form onSubmit={handleSubmit} className={cn(
+                "flex flex-col gap-4 rounded-[32px] p-6 shadow-2xl transition-all bg-white/10 backdrop-blur-xl border border-white/20 dark:bg-[#1e1e1e]/80",
+                className
+            )}>
+                <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-semibold text-white/70 ml-2">장르</label>
+                        <input
+                            type="text"
+                            value={genre}
+                            onChange={(e) => setGenre(e.target.value)}
+                            placeholder="예: 현대물, 오메가버스, 캠퍼스물..."
+                            className="w-full rounded-2xl bg-white/5 border border-white/10 p-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
+                            disabled={isGenerating}
                         />
-                    </DialogContent>
-                </Dialog>
-            )}
+                    </div>
 
-            <textarea
-                ref={internalTextareaRef}
-                rows={1}
-                value={value}
-                onChange={handleInputChange}
-                placeholder="Message..."
-                className="custom-scrollbar w-full resize-none border-0 bg-transparent p-3 text-foreground dark:text-white placeholder:text-muted-foreground dark:placeholder:text-gray-300 focus:ring-0 focus-visible:outline-none min-h-12"
-                {...props}
-            />
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-semibold text-white/70 ml-2">주인공 성격</label>
+                        <input
+                            type="text"
+                            value={personality}
+                            onChange={(e) => setPersonality(e.target.value)}
+                            placeholder="예: 까칠한 재벌 3세 수, 다정한 집착공..."
+                            className="w-full rounded-2xl bg-white/5 border border-white/10 p-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
+                            disabled={isGenerating}
+                        />
+                    </div>
 
-            <div className="mt-0.5 p-1 pt-0">
-                <TooltipProvider delayDuration={100}>
-                    <div className="flex items-center gap-2">
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <button
-                                    type="button"
-                                    onClick={handlePlusClick}
-                                    className="flex h-8 w-8 items-center justify-center rounded-full text-foreground dark:text-white transition-colors hover:bg-accent dark:hover:bg-[#515151] focus-visible:outline-none"
-                                >
-                                    <PlusIcon className="h-6 w-6" />
-                                    <span className="sr-only">Attach image</span>
-                                </button>
-                            </TooltipTrigger>
-                            <TooltipContent side="top" showArrow={true}>
-                                <p>Attach image</p>
-                            </TooltipContent>
-                        </Tooltip>
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-semibold text-white/70 ml-2">소설 컨셉</label>
+                        <textarea
+                            rows={3}
+                            value={concept}
+                            onChange={(e) => setConcept(e.target.value)}
+                            placeholder="원하는 상황이나 특별한 설정을 적어주세요..."
+                            className="w-full rounded-2xl bg-white/5 border border-white/10 p-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none"
+                            disabled={isGenerating}
+                        />
+                    </div>
+                </div>
 
-                        <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <PopoverTrigger asChild>
-                                        <button
-                                            type="button"
-                                            className="flex h-8 items-center gap-2 rounded-full p-2 text-sm text-foreground dark:text-white transition-colors hover:bg-accent dark:hover:bg-[#515151] focus-visible:outline-none focus-visible:ring-ring"
-                                        >
-                                            <Settings2Icon className="h-4 w-4" />
-                                            {!selectedTool && 'Tools'}
-                                        </button>
-                                    </PopoverTrigger>
-                                </TooltipTrigger>
-                                <TooltipContent side="top" showArrow={true}>
-                                    <p>Explore Tools</p>
-                                </TooltipContent>
-                            </Tooltip>
-                            <PopoverContent side="top" align="start">
-                                <div className="flex flex-col gap-1">
-                                    {toolsList.map(tool => (
-                                        <button
-                                            key={tool.id}
-                                            onClick={() => {
-                                                setSelectedTool(tool.id);
-                                                setIsPopoverOpen(false);
-                                            }}
-                                            className="flex w-full items-center gap-2 rounded-md p-2 text-left text-sm hover:bg-accent dark:hover:bg-[#515151]"
-                                        >
-                                            <tool.icon className="h-4 w-4" />
-                                            <span>{tool.name}</span>
-                                            {tool.extra && (
-                                                <span className="ml-auto text-xs text-muted-foreground dark:text-gray-400">
-                                                    {tool.extra}
-                                                </span>
-                                            )}
-                                        </button>
-                                    ))}
-                                </div>
-                            </PopoverContent>
-                        </Popover>
-
-                        {activeTool && (
+                <div className="flex items-center justify-end mt-2">
+                    <button
+                        type="submit"
+                        disabled={isGenerating}
+                        className="group relative flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-lg shadow-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+                    >
+                        {isGenerating ? (
                             <>
-                                <div className="h-4 w-px bg-border dark:bg-gray-600" />
-                                <button
-                                    onClick={() => setSelectedTool(null)}
-                                    className="flex h-8 items-center gap-2 rounded-full px-2 text-sm dark:hover:bg-[#3b4045] hover:bg-accent cursor-pointer dark:text-[#99ceff] text-[#2294ff] transition-colors flex-row items-center justify-center"
-                                >
-                                    {ActiveToolIcon && <ActiveToolIcon className="h-4 w-4" />}
-                                    {activeTool.shortName}
-                                    <XIcon className="h-4 w-4" />
-                                </button>
+                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                                <span>생성 중...</span>
+                            </>
+                        ) : (
+                            <>
+                                <SendIcon className="h-5 w-5" />
+                                <span>소설 생성하기</span>
                             </>
                         )}
+                    </button>
+                </div>
+            </form>
 
-                        <div className="ml-auto flex items-center gap-2">
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <button
-                                        type="button"
-                                        className="flex h-8 w-8 items-center justify-center rounded-full text-foreground dark:text-white transition-colors hover:bg-accent dark:hover:bg-[#515151] focus-visible:outline-none"
-                                    >
-                                        <MicIcon className="h-5 w-5" />
-                                        <span className="sr-only">Record voice</span>
-                                    </button>
-                                </TooltipTrigger>
-                                <TooltipContent side="top" showArrow={true}>
-                                    <p>Record voice</p>
-                                </TooltipContent>
-                            </Tooltip>
+            {/* Error Display */}
+            {error && (
+                <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20 backdrop-blur-md">
+                    <p className="text-sm text-red-400 font-medium text-center">
+                        ⚠️ {error}
+                    </p>
+                </div>
+            )}
 
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <button
-                                        type="submit"
-                                        disabled={!hasValue}
-                                        className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none bg-black text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-[#515151]"
-                                    >
-                                        <SendIcon className="h-6 w-6 text-bold" />
-                                        <span className="sr-only">Send message</span>
-                                    </button>
-                                </TooltipTrigger>
-                                <TooltipContent side="top" showArrow={true}>
-                                    <p>Send</p>
-                                </TooltipContent>
-                            </Tooltip>
+            {/* Generated Story Display */}
+            {generatedStory && (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="rounded-[32px] p-8 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                                생성된 단편 소설
+                            </h3>
+                            <button
+                                onClick={() => {
+                                    navigator.clipboard.writeText(generatedStory);
+                                    alert('클립보드에 복사되었습니다!');
+                                }}
+                                className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm transition-all"
+                            >
+                                복사하기
+                            </button>
+                        </div>
+                        <div className="prose prose-invert max-w-none">
+                            <div className="text-white/90 leading-relaxed whitespace-pre-wrap font-serif text-lg">
+                                {generatedStory}
+                            </div>
                         </div>
                     </div>
-                </TooltipProvider>
-            </div>
+                </div>
+            )}
 
             <style jsx global>{`
-                .custom-scrollbar::-webkit-scrollbar {
-                    width: 6px;
-                }
-                .custom-scrollbar::-webkit-scrollbar-track {
-                    background: transparent;
-                }
-                .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background: rgba(255, 255, 255, 0.2);
-                    border-radius: 3px;
-                }
-                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: rgba(255, 255, 255, 0.3);
+                @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
+                .font-serif {
+                    font-family: 'Noto Serif KR', serif;
                 }
             `}</style>
         </div>
