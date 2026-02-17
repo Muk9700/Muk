@@ -33,22 +33,9 @@ export default function AuthPage() {
     };
 
     return (
-        <main style={{
-            position: 'relative',
-            minHeight: '100vh',
-            display: 'flex',
-            overflow: 'hidden',
-        }}>
+        <main className="auth-main">
             {/* Left Section - 60% */}
-            <div style={{
-                flex: '3',
-                position: 'relative',
-                background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2a 100%)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                padding: 'min(8vw, 80px)',
-            }}>
+            <div className="auth-left">
                 {/* Content */}
                 <div style={{ position: 'relative', zIndex: 1 }}>
                     {/* LAYBAE Button - Links to laybae.xyz */}
@@ -127,15 +114,7 @@ export default function AuthPage() {
             </div>
 
             {/* Right Section - 40% */}
-            <div style={{
-                flex: '2',
-                position: 'relative',
-                background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 'min(6vw, 64px)',
-            }}>
+            <div className="auth-right">
                 {/* Back button - top left of right section */}
                 <Link
                     href="/"
@@ -290,9 +269,70 @@ export default function AuthPage() {
                 </div>
             </div>
 
-            {/* Font import */}
+            {/* Font import & Mobile Responsive Styles */}
             <style jsx global>{`
                 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800;900&display=swap');
+                
+                .auth-main {
+                    position: relative;
+                    min-height: 100vh;
+                    display: flex;
+                    overflow-x: hidden;
+                }
+                
+                .auth-left {
+                    flex: 3;
+                    position: relative;
+                    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2a 100%);
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    padding: min(8vw, 80px);
+                }
+                
+                .auth-right {
+                    flex: 2;
+                    position: relative;
+                    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: min(6vw, 64px);
+                }
+                
+                /* Mobile Responsive: 768px 이하 */
+                @media (max-width: 768px) {
+                    .auth-main {
+                        flex-direction: column;
+                        overflow-y: auto;
+                    }
+                    
+                    .auth-left {
+                        flex: none;
+                        min-height: 40vh;
+                        padding: 32px 24px;
+                        justify-content: center;
+                        gap: 32px;
+                    }
+                    
+                    .auth-right {
+                        flex: none;
+                        min-height: 60vh;
+                        padding: 32px 24px;
+                    }
+                }
+                
+                /* Very Small Mobile: 480px 이하 */
+                @media (max-width: 480px) {
+                    .auth-left {
+                        padding: 24px 16px;
+                        gap: 24px;
+                    }
+                    
+                    .auth-right {
+                        padding: 24px 16px;
+                    }
+                }
             `}</style>
         </main>
     );
