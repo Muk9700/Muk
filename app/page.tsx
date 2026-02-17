@@ -3,9 +3,19 @@
 import AetherHero from '@/components/main/hero';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Home() {
   const { user, loading, signOut } = useAuth();
+  const router = useRouter();
+
+  // Redirect to dashboard if user is logged in
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, loading, router]);
 
   return (
     <main style={{ position: 'relative' }}>

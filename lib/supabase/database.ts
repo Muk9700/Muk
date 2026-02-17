@@ -38,3 +38,6 @@ export async function updateUserProfile(
 
     return data;
 }
+
+// Re-export all gayarts functions
+export * from './gayarts';

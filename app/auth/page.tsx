@@ -2,18 +2,29 @@
 
 import Link from 'next/link';
 import { signInWithGoogle } from '@/lib/supabase/client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function AuthPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { user } = useAuth();
+    const router = useRouter();
+
+    // Redirect to dashboard if already logged in
+    useEffect(() => {
+        if (user) {
+            router.push('/dashboard');
+        }
+    }, [user, router]);
 
     const handleGoogleSignIn = async () => {
         try {
             setIsLoading(true);
             setError(null);
             await signInWithGoogle();
-            // The OAuth flow will redirect automatically
+            // The OAuth flow will redirect automatically to /dashboard
         } catch (err) {
             console.error('Sign in error:', err);
             setError('Failed to sign in. Please try again.');
