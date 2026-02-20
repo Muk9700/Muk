@@ -38,56 +38,26 @@ export default function AuthPage() {
             <div className="auth-left">
                 {/* Content */}
                 <div style={{ position: 'relative', zIndex: 1 }}>
-                    {/* LAYBAE Button - Links to laybae.xyz */}
-                    <a
-                        href="https://laybae.xyz"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                            display: 'inline-block',
-                            textDecoration: 'none',
-                            transition: 'all 0.3s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-4px)';
-                            e.currentTarget.style.filter = 'brightness(1.2)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.filter = 'brightness(1)';
-                        }}
-                    >
-                        <div style={{
-                            padding: '16px 32px',
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                            borderRadius: 16,
-                            boxShadow: '0 8px 24px rgba(102, 126, 234, 0.3)',
-                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                    <div style={{
+                        display: 'inline-block',
+                        padding: '12px 24px',
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        borderRadius: 12,
+                        boxShadow: '0 8px 24px rgba(102, 126, 234, 0.25)',
+                    }}>
+                        <span style={{
+                            fontSize: 'clamp(0.85rem, 1.2vw, 1rem)',
+                            fontWeight: 700,
+                            color: '#ffffff',
+                            letterSpacing: '0.08em',
+                            fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
                         }}>
-                            <h1 style={{
-                                fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
-                                fontWeight: 800,
-                                color: '#ffffff',
-                                margin: 0,
-                                letterSpacing: '0.05em',
-                                fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
-                            }}>
-                                LAYBAE
-                            </h1>
-                            <p style={{
-                                fontSize: 'clamp(0.9rem, 1.5vw, 1.1rem)',
-                                color: 'rgba(255, 255, 255, 0.9)',
-                                margin: '4px 0 0 0',
-                                fontWeight: 600,
-                                fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
-                            }}>
-                                Gay Dating App
-                            </p>
-                        </div>
-                    </a>
+                            BL NOVEL AI
+                        </span>
+                    </div>
                 </div>
 
-                {/* Bottom - Gay Art AI */}
+                {/* Bottom - BL Novel AI */}
                 <div style={{ position: 'relative', zIndex: 1 }}>
                     <h2 style={{
                         fontSize: 'clamp(3rem, 8vw, 7rem)',
@@ -99,7 +69,7 @@ export default function AuthPage() {
                         fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
                         textTransform: 'uppercase',
                     }}>
-                        Gay Art<br />AI
+                        BL<br />소설 AI
                     </h2>
                     <p style={{
                         fontSize: 'clamp(1rem, 2vw, 1.25rem)',
@@ -108,7 +78,7 @@ export default function AuthPage() {
                         maxWidth: '500px',
                         fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
                     }}>
-                        Transform your photos with AI-powered creativity
+                        장르, 성격, 컨셉만 입력하면 나만의 BL 단편 소설을 완성해드립니다.
                     </p>
                 </div>
             </div>
@@ -251,21 +221,7 @@ export default function AuthPage() {
                         </div>
                     )}
 
-                    {/* Terms and Privacy */}
-                    <p style={{
-                        fontSize: '0.75rem',
-                        color: 'rgba(255, 255, 255, 0.5)',
-                        textAlign: 'center',
-                        marginTop: '2rem',
-                        marginBottom: 0,
-                        lineHeight: 1.5,
-                        fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
-                    }}>
-                        By continuing, you agree to our{' '}
-                        <a href="#" style={{ color: '#667eea', textDecoration: 'none' }}>Terms of Service</a>
-                        {' '}and{' '}
-                        <a href="#" style={{ color: '#667eea', textDecoration: 'none' }}>Privacy Policy</a>
-                    </p>
+                    {/* Terms removed */}
                 </div>
             </div>
 

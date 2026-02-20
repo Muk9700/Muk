@@ -1,14 +1,61 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+
+// Supabase Admin Client (서버사이드 - service_role 키 필요)
+const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+const FREE_GENERATION_LIMIT = 1;
 
 export async function POST(request: NextRequest) {
     try {
-        const { genre, personality, concept } = await request.json();
+        const { genre, personality, concept, userId } = await request.json();
 
         if (!genre || !personality || !concept) {
             return NextResponse.json(
                 { error: "Genre, personality, and concept are all required" },
                 { status: 400 }
+            );
+        }
+
+        // 유저 인증 확인
+        if (!userId) {
+            return NextResponse.json(
+                { error: "로그인이 필요합니다." },
+                { status: 401 }
+            );
+        }
+
+        // 무료 생성 횟수 체크
+        const { data: genData, error: genError } = await supabaseAdmin
+            .from("user_generations")
+            .select("count")
+            .eq("user_id", userId)
+            .single();
+
+        if (genError && genError.code !== "PGRST116") {
+            // PGRST116 = no rows found (처음 사용자)
+            console.error("Generation count fetch error:", genError);
+            return NextResponse.json(
+                { error: "사용 횟수를 확인하는 중 오류가 발생했습니다." },
+                { status: 500 }
+            );
+        }
+
+        const currentCount = genData?.count ?? 0;
+
+        if (currentCount >= FREE_GENERATION_LIMIT) {
+            return NextResponse.json(
+                {
+                    error: "FREE_LIMIT_EXCEEDED",
+                    message: "무료 소설 생성 기회를 모두 소진했습니다. 계정당 1회의 무료 생성 기회가 제공됩니다.",
+                    usedCount: currentCount,
+                    limit: FREE_GENERATION_LIMIT,
+                },
+                { status: 403 }
             );
         }
 
@@ -39,9 +86,25 @@ Structure the output beautifully with proper spacing and paragraphs.`;
 
         const generatedText = response.candidates?.[0]?.content?.parts?.find(p => p.text)?.text || "";
 
+        // 생성 성공 후 카운트 업데이트
+        if (currentCount === 0 && !genData) {
+            // 첫 사용: insert
+            await supabaseAdmin
+                .from("user_generations")
+                .insert({ user_id: userId, count: 1 });
+        } else {
+            // 기존 사용자: update
+            await supabaseAdmin
+                .from("user_generations")
+                .update({ count: currentCount + 1 })
+                .eq("user_id", userId);
+        }
+
         return NextResponse.json({
             success: true,
             story: generatedText,
+            usedCount: currentCount + 1,
+            limit: FREE_GENERATION_LIMIT,
         });
     } catch (error: any) {
         console.error("Error generating story:", error);

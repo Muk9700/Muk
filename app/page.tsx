@@ -234,7 +234,7 @@ export default function Home() {
                 2. AI 소설 생성
               </h3>
               <p style={{ opacity: 0.8, lineHeight: 1.6, margin: 0 }}>
-                Gemini 1.5 Flash 엔진이 입력된 정보를 바탕으로 감성적인 BL 단편 소설을 집필합니다.
+                AI 엔진이 입력된 정보를 바탕으로 감성적인 BL 단편 소설을 집필합니다.
               </p>
             </div>
 
