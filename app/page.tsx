@@ -140,14 +140,7 @@ export default function Home() {
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
       `}</style>
 
-      <AetherHero
-        title="BL 소설 생성 AI"
-        subtitle="장르, 성격, 컨셉만 넣으면 당신만의 특별한 BL 단편 소설을 만들어드립니다. 지금 바로 시작해보세요."
-        ctaLabel="소설 쓰러 가기"
-        ctaHref="/dashboard"
-        secondaryCtaLabel="둘러보기"
-        secondaryCtaHref="#how-it-works"
-      />
+      <AetherHero />
 
       {/* Feature highlights with custom SVG */}
       <section style={{
@@ -234,7 +227,7 @@ export default function Home() {
                 2. AI 소설 생성
               </h3>
               <p style={{ opacity: 0.8, lineHeight: 1.6, margin: 0 }}>
-                AI 엔진이 입력된 정보를 바탕으로 감성적인 BL 단편 소설을 집필합니다.
+                AI 엔진이 입력된 정보를 바탕으로 감성적인 미소년 로맨스 단편 소설을 집필합니다.
               </p>
             </div>
 

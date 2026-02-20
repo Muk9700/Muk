@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BL 소설 생성기",
-  description: "AI 기반 BL 단편 소설 생성 서비스",
+  title: "Bl_ueHour | 당신만의 특별한 이야기",
+  description: "웹툰 스타일 미소년 단편 소설 생성 서비스",
 };
 
 export default function RootLayout({

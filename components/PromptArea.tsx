@@ -265,8 +265,8 @@ const GeneratingOverlay = () => {
     );
 };
 
-// --- 무료 소진 배너 ---
-const FreeLimitBanner = () => (
+// --- 크레딧 부족 배너 ---
+const NoCreditsBanner = () => (
     <div style={{
         padding: "2rem",
         borderRadius: "24px",
@@ -275,7 +275,7 @@ const FreeLimitBanner = () => (
         textAlign: "center",
         backdropFilter: "blur(20px)",
     }}>
-        <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📚</div>
+        <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🪙</div>
         <h3 style={{
             fontSize: "1.25rem",
             fontWeight: 700,
@@ -283,18 +283,29 @@ const FreeLimitBanner = () => (
             margin: "0 0 0.75rem 0",
             fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
         }}>
-            무료 생성 기회를 모두 소진했어요
+            크레딧이 부족합니다
         </h3>
         <p style={{
             fontSize: "0.95rem",
             color: "rgba(255,255,255,0.55)",
-            margin: 0,
+            margin: "0 0 1.5rem 0",
             lineHeight: 1.7,
             fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
         }}>
-            계정당 <strong style={{ color: "rgba(255,255,255,0.8)" }}>1회</strong>의 무료 소설 생성 기회가 제공됩니다.<br />
-            생성된 소설은 아래에서 다시 확인하실 수 있습니다.
+            무료 생성 기회를 소진했으며 보유한 크레딧이 없습니다.<br />
+            스토어에서 크레딧을 충전하고 소설을 계속 생성해 보세요.
         </p>
+        <a href="/store" style={{
+            display: "inline-block",
+            padding: "0.75rem 2rem",
+            borderRadius: "99px",
+            background: "linear-gradient(to right, #ec4899, #f97316)",
+            color: "white",
+            fontWeight: "bold",
+            textDecoration: "none",
+            transition: "all 0.2s",
+            boxShadow: "0 4px 14px 0 rgba(236, 72, 153, 0.39)",
+        }}>상점으로 이동하기</a>
     </div>
 );
 
@@ -310,8 +321,27 @@ export const PromptBox = React.forwardRef<
     const [isGenerating, setIsGenerating] = React.useState(false);
     const [generatedStory, setGeneratedStory] = React.useState<string | null>(null);
     const [error, setError] = React.useState<string | null>(null);
-    const [isFreeLimitExceeded, setIsFreeLimitExceeded] = React.useState(false);
+    const [isNoCredits, setIsNoCredits] = React.useState(false);
     const [copied, setCopied] = React.useState(false);
+
+    // 크레딧 데이터
+    const [credits, setCredits] = React.useState<number>(0);
+    const [usedCount, setUsedCount] = React.useState<number>(0);
+
+    // 컴포넌트 마운트 시 크레딧 조회
+    React.useEffect(() => {
+        if (user) {
+            fetch(`/api/user/credits?userId=${user.id}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && typeof data.credits === 'number') {
+                        setCredits(data.credits);
+                        setUsedCount(data.count);
+                    }
+                })
+                .catch(err => console.error("Error fetching credits:", err));
+        }
+    }, [user]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -331,6 +361,7 @@ export const PromptBox = React.forwardRef<
         setIsGenerating(true);
         setError(null);
         setGeneratedStory(null);
+        setIsNoCredits(false);
 
         try {
             const response = await fetch('/api/generate-story', {
@@ -341,8 +372,8 @@ export const PromptBox = React.forwardRef<
 
             const data = await response.json();
 
-            if (response.status === 403 && data.error === "FREE_LIMIT_EXCEEDED") {
-                setIsFreeLimitExceeded(true);
+            if (response.status === 403 && data.error === "NO_CREDITS") {
+                setIsNoCredits(true);
                 return;
             }
 
@@ -351,6 +382,8 @@ export const PromptBox = React.forwardRef<
             }
 
             setGeneratedStory(data.story);
+            if (data.credits !== undefined) setCredits(data.credits);
+            if (data.usedCount !== undefined) setUsedCount(data.usedCount);
         } catch (err: any) {
             console.error('Error generating story:', err);
             setError(err.message || '소설 생성 중 오류가 발생했습니다.');
@@ -372,62 +405,78 @@ export const PromptBox = React.forwardRef<
             {isGenerating && <GeneratingOverlay />}
 
             <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto">
-                {/* 무료 소진 배너 */}
-                {isFreeLimitExceeded && <FreeLimitBanner />}
+                {/* 크레딧 부족 배너 */}
+                {isNoCredits && <NoCreditsBanner />}
 
-                {/* 입력 폼 - 소진 시 숨기기 */}
-                {!isFreeLimitExceeded && (
+                {/* 입력 폼 - 크레딧 부족 시 폼 숨김 */}
+                {!isNoCredits && (
                     <form onSubmit={handleSubmit} className={cn(
-                        "flex flex-col gap-4 rounded-[32px] p-6 shadow-2xl transition-all bg-white/10 backdrop-blur-xl border border-white/20 dark:bg-[#1e1e1e]/80",
+                        "relative flex flex-col gap-4 rounded-[32px] p-6 shadow-[0_8px_32px_rgba(30,27,75,0.4)] transition-all bg-[#0A0D14]/40 backdrop-blur-2xl border border-indigo-500/20 overflow-hidden",
                         className
                     )}>
-                        <div className="flex flex-col gap-4">
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent pointer-events-none" />
+                        <div className="relative z-10 flex flex-col gap-4">
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-semibold text-white/70 ml-2">장르</label>
+                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">장르</label>
                                 <input
                                     type="text"
                                     value={genre}
                                     onChange={(e) => setGenre(e.target.value)}
                                     placeholder="예: 현대물, 오메가버스, 캠퍼스물..."
-                                    className="w-full rounded-2xl bg-white/5 border border-white/10 p-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
+                                    className="w-full rounded-2xl bg-[#0A0D14]/50 border border-indigo-500/30 p-3 text-indigo-50 placeholder:text-indigo-200/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-light"
                                     disabled={isGenerating}
                                 />
                             </div>
 
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-semibold text-white/70 ml-2">주인공 성격</label>
+                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">주인공 성격</label>
                                 <input
                                     type="text"
                                     value={personality}
                                     onChange={(e) => setPersonality(e.target.value)}
                                     placeholder="예: 까칠한 재벌 3세 수, 다정한 집착공..."
-                                    className="w-full rounded-2xl bg-white/5 border border-white/10 p-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
+                                    className="w-full rounded-2xl bg-[#0A0D14]/50 border border-indigo-500/30 p-3 text-indigo-50 placeholder:text-indigo-200/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-light"
                                     disabled={isGenerating}
                                 />
                             </div>
 
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-semibold text-white/70 ml-2">소설 컨셉</label>
+                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">소설 컨셉</label>
                                 <textarea
                                     rows={3}
                                     value={concept}
                                     onChange={(e) => setConcept(e.target.value)}
                                     placeholder="원하는 상황이나 특별한 설정을 적어주세요..."
-                                    className="w-full rounded-2xl bg-white/5 border border-white/10 p-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all resize-none"
+                                    className="w-full rounded-2xl bg-[#0A0D14]/50 border border-indigo-500/30 p-3 text-indigo-50 placeholder:text-indigo-200/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all resize-none font-light"
                                     disabled={isGenerating}
                                 />
                             </div>
                         </div>
 
-                        <div className="flex items-center justify-between mt-2">
-                            {/* 무료 1회 안내 */}
-                            <span style={{
-                                fontSize: "0.8rem",
-                                color: "rgba(255,255,255,0.35)",
-                                fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
-                            }}>
-                                ✨ 계정당 1회 무료 생성
-                            </span>
+                        <div className="relative z-10 flex items-center justify-between mt-2">
+                            {/* 안내 및 잔여 크레딧 */}
+                            <div className="flex flex-col gap-1 pl-2">
+                                {usedCount < 1 ? (
+                                    <span style={{
+                                        fontSize: "0.85rem",
+                                        color: "#fca5a5",
+                                        fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
+                                        fontWeight: "600",
+                                        textShadow: "0 0 10px rgba(239,68,68,0.5)"
+                                    }}>
+                                        ✨ 첫 회 무료 생성 안내
+                                    </span>
+                                ) : (
+                                    <span style={{
+                                        fontSize: "0.85rem",
+                                        color: "rgba(255,255,255,0.7)",
+                                        fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
+                                        fontWeight: "500"
+                                    }}>
+                                        💎 보유 크레딧: <strong className="text-white text-base">{credits}</strong>
+                                    </span>
+                                )}
+                            </div>
                             <button
                                 type="submit"
                                 disabled={isGenerating}

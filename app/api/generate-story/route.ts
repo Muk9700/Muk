@@ -32,32 +32,36 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 무료 생성 횟수 체크
+        // 무료 생성 횟수 및 크레딧 체크
         const { data: genData, error: genError } = await supabaseAdmin
             .from("user_generations")
-            .select("count")
+            .select("count, credits")
             .eq("user_id", userId)
             .single();
 
         if (genError && genError.code !== "PGRST116") {
-            console.error("[Generate Story] Error fetching count:", genError);
+            console.error("[Generate Story] Error fetching count/credits:", genError);
             return NextResponse.json(
-                { error: "사용 횟수를 확인하는 중 오류가 발생했습니다." },
+                { error: "사용자 정보를 확인하는 중 오류가 발생했습니다." },
                 { status: 500 }
             );
         }
 
         const currentCount = genData?.count ?? 0;
-        console.log(`[Generate Story] Current count for user ${userId}: ${currentCount}`);
+        const currentCredits = genData?.credits ?? 0;
+        const isFreeExceeded = currentCount >= FREE_GENERATION_LIMIT;
 
-        if (currentCount >= FREE_GENERATION_LIMIT) {
-            console.warn(`[Generate Story] Limit exceeded for ${userId}: ${currentCount}/${FREE_GENERATION_LIMIT}`);
+        console.log(`[Generate Story] User ${userId}: Count=${currentCount}, Credits=${currentCredits}`);
+
+        if (isFreeExceeded && currentCredits <= 0) {
+            console.warn(`[Generate Story] NO REDITS for ${userId}. Out of free limits and 0 credits.`);
             return NextResponse.json(
                 {
-                    error: "FREE_LIMIT_EXCEEDED",
-                    message: "무료 소설 생성 기회를 모두 소진했습니다. 계정당 1회의 무료 생성 기회가 제공됩니다.",
+                    error: "NO_CREDITS",
+                    message: "무료 소설 생성 기회를 모두 소진했으며 보유한 크레딧이 없습니다.",
                     usedCount: currentCount,
                     limit: FREE_GENERATION_LIMIT,
+                    credits: currentCredits
                 },
                 { status: 403 }
             );
@@ -92,28 +96,44 @@ Structure the output beautifully with proper spacing and paragraphs.`;
         const generatedText = response.candidates?.[0]?.content?.parts?.find(p => p.text)?.text || "";
         console.log(`[Generate Story] AI Generation success.`);
 
-        // 생성 성공 후 카운트 업데이트 (upsert 사용)
+        // 생성 성공 후 차감 로직 분기
+        let newCount = currentCount;
+        let newCredits = currentCredits;
+
+        if (!isFreeExceeded) {
+            // 무료 기회 소진
+            newCount = currentCount + 1;
+            console.log(`[Generate Story] Using free generation for ${userId}`);
+        } else {
+            // 크레딧 소진
+            newCredits = currentCredits - 1;
+            console.log(`[Generate Story] Using 1 credit for ${userId}`);
+        }
+
         const { error: updateError } = await supabaseAdmin
             .from("user_generations")
             .upsert(
-                { user_id: userId, count: currentCount + 1, updated_at: new Date().toISOString() },
+                {
+                    user_id: userId,
+                    count: newCount,
+                    credits: newCredits,
+                    updated_at: new Date().toISOString()
+                },
                 { onConflict: 'user_id' }
             );
 
         if (updateError) {
             console.error("[Generate Story] DB Update Error:", updateError);
-            // 소설은 이미 생성되었으므로 사용자에게 보낼 수도 있지만, 
-            // 제한이 작동하지 않게 되므로 엄격하게 관리하려면 여기서 에러 처리 가능.
-            // 일단 로그만 확실히 남기고 결과 반환.
         } else {
-            console.log(`[Generate Story] Count updated for ${userId}: ${currentCount + 1}`);
+            console.log(`[Generate Story] Record updated for ${userId}: Count=${newCount}, Credits=${newCredits}`);
         }
 
         return NextResponse.json({
             success: true,
             story: generatedText,
-            usedCount: currentCount + 1,
+            usedCount: newCount,
             limit: FREE_GENERATION_LIMIT,
+            credits: newCredits
         });
     } catch (error: any) {
         console.error("[Generate Story] Uncaught Error:", error);
@@ -123,3 +143,4 @@ Structure the output beautifully with proper spacing and paragraphs.`;
         );
     }
 }
+

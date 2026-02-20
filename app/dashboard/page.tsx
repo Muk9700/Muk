@@ -42,18 +42,29 @@ export default function DashboardPage() {
             background: 'transparent',
             position: 'relative',
         }}>
-            {/* Grid background */}
+            {/* Background Gradients */}
             <div style={{
                 position: 'fixed',
                 inset: 0,
-                backgroundImage: `
-                    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px)
-                `,
-                backgroundSize: '40px 40px',
-                pointerEvents: 'none',
                 zIndex: 0,
-            }} />
+                background: 'linear-gradient(to bottom, #0A0D14, #10142A, #1D1739)',
+            }}>
+                {/* 몽환적 블러 도형들 */}
+                <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '40%', height: '40%', background: '#3b82f6', borderRadius: '50%', filter: 'blur(120px)', opacity: 0.15 }} />
+                <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '50%', height: '50%', background: '#8b5cf6', borderRadius: '50%', filter: 'blur(150px)', opacity: 0.15 }} />
+
+                {/* 미세한 그리드 유지 */}
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundImage: `
+                        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+                    `,
+                    backgroundSize: '40px 40px',
+                    pointerEvents: 'none',
+                }} />
+            </div>
 
             {/* Profile Popover - Top Right */}
             <div
@@ -177,7 +188,8 @@ export default function DashboardPage() {
                 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800;900&display=swap');
                 
                 body {
-                    background: #181818;
+                    background: #0A0D14;
+                    margin: 0;
                 }
             `}</style>
         </main>
