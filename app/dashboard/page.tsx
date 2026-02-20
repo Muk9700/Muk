@@ -84,13 +84,14 @@ export default function DashboardPage() {
                     alignItems: 'center',
                     gap: '8px',
                 }}>
-                    {/* Share Button or Store Link (Optional) */}
+                    {/* Store Link Button */}
                     <button
                         onClick={() => router.push('/store')}
+                        title="크레딧 충전하기"
                         style={{
                             width: 48,
                             height: 48,
-                            borderRadius: '50%',
+                            borderRadius: '16px',
                             background: 'rgba(255, 255, 255, 0.12)',
                             backdropFilter: 'blur(10px)',
                             border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -98,39 +99,43 @@ export default function DashboardPage() {
                             alignItems: 'center',
                             justifyContent: 'center',
                             cursor: 'pointer',
-                            color: '#ffffff',
-                            transition: 'all 0.3s ease',
+                            color: '#fbbf24', // Gold color for importance
+                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-                            e.currentTarget.style.transform = 'scale(1.05)';
+                            e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)';
+                            e.currentTarget.style.boxShadow = '0 8px 20px rgba(251, 191, 36, 0.2)';
                         }}
                         onMouseLeave={(e) => {
                             e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
-                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
                         }}
                     >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" />
                         </svg>
                     </button>
 
                     {/* Profile Picture Button */}
-                    <button style={{
-                        width: 48,
-                        height: 48,
-                        borderRadius: '50%',
-                        border: '2px solid rgba(255, 255, 255, 0.3)',
-                        overflow: 'hidden',
-                        cursor: 'pointer',
-                        transition: 'all 0.3s ease',
-                        transform: isProfileHovered ? 'scale(1.05)' : 'scale(1)',
-                        boxShadow: isProfileHovered
-                            ? '0 8px 24px rgba(0, 0, 0, 0.4)'
-                            : '0 4px 12px rgba(0, 0, 0, 0.2)',
-                        background: '#303030',
-                    }}>
+                    <button
+                        style={{
+                            width: 48,
+                            height: 48,
+                            borderRadius: '50%',
+                            border: '2px solid rgba(255, 255, 255, 0.3)',
+                            overflow: 'hidden',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            transform: isProfileHovered ? 'scale(1.05)' : 'scale(1)',
+                            boxShadow: isProfileHovered
+                                ? '0 8px 24px rgba(0, 0, 0, 0.4)'
+                                : '0 4px 12px rgba(0, 0, 0, 0.2)',
+                            background: '#303030',
+                        }}
+                    >
                         {user.user_metadata?.avatar_url ? (
                             <img
                                 src={user.user_metadata.avatar_url}

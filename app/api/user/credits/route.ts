@@ -27,10 +27,17 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: "Failed to fetch credits" }, { status: 500 });
         }
 
-        return NextResponse.json({
+        const response = NextResponse.json({
             credits: data?.credits ?? 0,
             count: data?.count ?? 0
         });
+
+        // 브라우저 및 CDN 캐싱 강제 방지
+        response.headers.set('Cache-Control', 'no-store, max-age=0, must-revalidate');
+        response.headers.set('Pragma', 'no-cache');
+        response.headers.set('Expires', '0');
+
+        return response;
 
     } catch (error) {
         return NextResponse.json({ credits: 0, count: 0 }, { status: 500 });

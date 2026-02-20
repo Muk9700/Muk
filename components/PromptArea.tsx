@@ -311,6 +311,7 @@ export const PromptBox = React.forwardRef<
     const [error, setError] = React.useState<string | null>(null);
     const [isNoCredits, setIsNoCredits] = React.useState(false);
     const [copied, setCopied] = React.useState(false);
+    const [creditsLoaded, setCreditsLoaded] = React.useState(false);
 
     // 크레딧 데이터
     const [credits, setCredits] = React.useState<number>(0);
@@ -319,15 +320,22 @@ export const PromptBox = React.forwardRef<
     // 컴포넌트 마운트 시 크레딧 조회
     React.useEffect(() => {
         if (user) {
-            fetch(`/api/user/credits?userId=${user.id}&t=${Date.now()}`)
+            fetch(`/api/user/credits?userId=${user.id}&t=${Date.now()}`, {
+                cache: 'no-store', // 브라우저 캐시 강제 무시
+                headers: { 'Pragma': 'no-cache', 'Cache-Control': 'no-cache' }
+            })
                 .then(res => res.json())
                 .then(data => {
                     if (data && typeof data.credits === 'number') {
                         setCredits(data.credits);
                         setUsedCount(data.count);
                     }
+                    setCreditsLoaded(true);
                 })
-                .catch(err => console.error("Error fetching credits:", err));
+                .catch(err => {
+                    console.error("Error fetching credits:", err);
+                    setCreditsLoaded(true); // 에러 발생 시에도 계속 기다리지 않도록 처리
+                });
         }
     }, [user]);
 
@@ -480,11 +488,20 @@ export const PromptBox = React.forwardRef<
                             </div>
                             <button
                                 type="submit"
-                                disabled={isGenerating}
-                                className="group relative flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-lg shadow-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+                                disabled={isGenerating || !creditsLoaded}
+                                className="group relative flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-lg shadow-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
                             >
-                                <SendIcon className="h-5 w-5" />
-                                <span>소설 생성하기</span>
+                                {!creditsLoaded ? (
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        <span>확인 중...</span>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <SendIcon className="h-5 w-5" />
+                                        <span>소설 생성하기</span>
+                                    </>
+                                )}
                             </button>
                         </div>
                     </form>

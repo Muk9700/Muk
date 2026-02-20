@@ -32,12 +32,12 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 무료 생성 횟수 및 크레딧 체크
+        // 무료 생성 횟수 및 크레딧 체크 (실시간 DB 상태 확인)
         const { data: genData, error: genError } = await supabaseAdmin
             .from("user_generations")
-            .select("count, credits")
+            .select("count, credits, user_id")
             .eq("user_id", userId)
-            .single();
+            .maybeSingle(); // single() 대신 maybeSingle()로 데이터 없음 케이스 안전하게 처리
 
         if (genError && genError.code !== "PGRST116") {
             console.error("[Generate Story] Error fetching count/credits:", genError);
