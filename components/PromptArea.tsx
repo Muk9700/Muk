@@ -263,6 +263,40 @@ const GeneratingOverlay = () => {
 };
 
 // --- 크레딧 부족 안내 다이얼로그 ---
+const IpAbuseDialog = ({ isOpen, onClose, onGoToStore }: { isOpen: boolean, onClose: () => void, onGoToStore: () => void }) => (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="max-w-[440px] border border-red-500/20 bg-[#1c1c1c]/95 backdrop-blur-2xl">
+            <div className="p-8 flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">무료 혜택이 이미 대여되었습니다.</h3>
+                <p className="text-white/60 mb-8 leading-relaxed">
+                    이미 이 기기 또는 네트워크에서<br />
+                    무료 소설 생성 혜택을 사용하셨습니다.<br />
+                    <span className="text-white/80 font-medium">지속적으로 이용하시려면 크레딧을 구매해주세요!</span>
+                </p>
+                <div className="flex gap-3 w-full">
+                    <button
+                        onClick={onClose}
+                        className="flex-1 py-3 px-6 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-semibold transition-all border border-white/5"
+                    >
+                        닫기
+                    </button>
+                    <button
+                        onClick={onGoToStore}
+                        className="flex-1 py-3 px-6 rounded-2xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/20 active:scale-95"
+                    >
+                        크레딧 충전장으로
+                    </button>
+                </div>
+            </div>
+        </DialogContent>
+    </Dialog>
+);
+
 const NoCreditsDialog = ({ isOpen, onClose, onGoToStore }: { isOpen: boolean, onClose: () => void, onGoToStore: () => void }) => (
     <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="max-w-[400px] border border-white/10 bg-[#1c1c1c]/95 backdrop-blur-2xl">
@@ -310,6 +344,7 @@ export const PromptBox = React.forwardRef<
     const [generatedStory, setGeneratedStory] = React.useState<string | null>(null);
     const [error, setError] = React.useState<string | null>(null);
     const [isNoCredits, setIsNoCredits] = React.useState(false);
+    const [isIpAbuse, setIsIpAbuse] = React.useState(false);
     const [copied, setCopied] = React.useState(false);
     const [creditsLoaded, setCreditsLoaded] = React.useState(false);
 
@@ -376,9 +411,11 @@ export const PromptBox = React.forwardRef<
                 const data = await response.json();
                 if (data.error === "NO_CREDITS") {
                     setIsNoCredits(true);
-                    setIsGenerating(false);
-                    return;
+                } else if (data.error === "IP_ABUSE") {
+                    setIsIpAbuse(true);
                 }
+                setIsGenerating(false);
+                return;
             }
 
             const data = await response.json();
@@ -414,6 +451,11 @@ export const PromptBox = React.forwardRef<
                 <NoCreditsDialog
                     isOpen={isNoCredits}
                     onClose={() => setIsNoCredits(false)}
+                    onGoToStore={() => router.push('/store')}
+                />
+                <IpAbuseDialog
+                    isOpen={isIpAbuse}
+                    onClose={() => setIsIpAbuse(false)}
                     onGoToStore={() => router.push('/store')}
                 />
 

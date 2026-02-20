@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS public.user_generations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   count INTEGER NOT NULL DEFAULT 0,
+  last_ip TEXT, -- 추가: 가장 최근 생성 시 사용된 IP
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   UNIQUE(user_id)

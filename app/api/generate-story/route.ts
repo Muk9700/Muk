@@ -51,7 +51,34 @@ export async function POST(request: NextRequest) {
         const currentCredits = genData?.credits ?? 0;
         const isFreeExceeded = currentCount >= FREE_GENERATION_LIMIT;
 
-        console.log(`[Generate Story] User ${userId}: Count=${currentCount}, Credits=${currentCredits}`);
+        // [v0.5] IP 기반 어뷰징 체크 (무료 생성 시도 시에만)
+        const forwarded = request.headers.get("x-forwarded-for");
+        const clientIp = forwarded ? forwarded.split(',')[0] : (request as any).ip || "127.0.0.1";
+
+        if (!isFreeExceeded) {
+            // 이 IP가 이미 다른 유저(userID 아님)에 의해 무료 혜택을 받는 데 사용되었는지 확인
+            const { data: ipData, error: ipError } = await supabaseAdmin
+                .from("user_generations")
+                .select("user_id")
+                .eq("last_ip", clientIp)
+                .gt("count", 0) // 이미 무료 생성을 1회 이상 함
+                .neq("user_id", userId) // 현재 유저 본인이 아닌 다른 유저
+                .limit(1)
+                .maybeSingle();
+
+            if (ipData) {
+                console.warn(`[Generate Story] IP_ABUSE detected: IP ${clientIp} already used for free gen by ${ipData.user_id}`);
+                return NextResponse.json(
+                    {
+                        error: "IP_ABUSE",
+                        message: "이미 이 기기 또는 네트워크에서 무료 소설 생성 혜택을 사용하셨습니다. 계속하시려면 크레딧을 구매해주세요.",
+                    },
+                    { status: 403 }
+                );
+            }
+        }
+
+        console.log(`[Generate Story] User ${userId} (IP: ${clientIp}): Count=${currentCount}, Credits=${currentCredits}`);
 
         if (isFreeExceeded && currentCredits <= 0) {
             console.warn(`[Generate Story] NO REDITS for ${userId}. Out of free limits and 0 credits.`);
@@ -117,6 +144,7 @@ Structure the output beautifully with proper spacing and paragraphs.`;
                     user_id: userId,
                     count: newCount,
                     credits: newCredits,
+                    last_ip: clientIp, // IP 기록 추가
                     updated_at: new Date().toISOString()
                 },
                 { onConflict: 'user_id' }
