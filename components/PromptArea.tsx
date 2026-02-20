@@ -3,6 +3,7 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
@@ -261,48 +262,38 @@ const GeneratingOverlay = () => {
     );
 };
 
-// --- 크레딧 부족 배너 ---
-const NoCreditsBanner = () => (
-    <div style={{
-        padding: "2rem",
-        borderRadius: "24px",
-        background: "linear-gradient(135deg, rgba(239,68,68,0.12) 0%, rgba(118,75,162,0.12) 100%)",
-        border: "1px solid rgba(239,68,68,0.3)",
-        textAlign: "center",
-        backdropFilter: "blur(20px)",
-    }}>
-        <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🪙</div>
-        <h3 style={{
-            fontSize: "1.25rem",
-            fontWeight: 700,
-            color: "#fca5a5",
-            margin: "0 0 0.75rem 0",
-            fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
-        }}>
-            크레딧이 부족합니다
-        </h3>
-        <p style={{
-            fontSize: "0.95rem",
-            color: "rgba(255,255,255,0.55)",
-            margin: "0 0 1.5rem 0",
-            lineHeight: 1.7,
-            fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
-        }}>
-            무료 생성 기회를 소진했으며 보유한 크레딧이 없습니다.<br />
-            스토어에서 크레딧을 충전하고 소설을 계속 생성해 보세요.
-        </p>
-        <a href="/store" style={{
-            display: "inline-block",
-            padding: "0.75rem 2rem",
-            borderRadius: "99px",
-            background: "linear-gradient(to right, #ec4899, #f97316)",
-            color: "white",
-            fontWeight: "bold",
-            textDecoration: "none",
-            transition: "all 0.2s",
-            boxShadow: "0 4px 14px 0 rgba(236, 72, 153, 0.39)",
-        }}>상점으로 이동하기</a>
-    </div>
+// --- 크레딧 부족 안내 다이얼로그 ---
+const NoCreditsDialog = ({ isOpen, onClose, onGoToStore }: { isOpen: boolean, onClose: () => void, onGoToStore: () => void }) => (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="max-w-[400px] border border-white/10 bg-[#1c1c1c]/95 backdrop-blur-2xl">
+            <div className="p-8 flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-full bg-orange-500/10 flex items-center justify-center mb-6">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">무료 생성 횟수를 모두 소진하였습니다.</h3>
+                <p className="text-white/60 mb-8 leading-relaxed">
+                    나만의 감성 BL 소설을 더 생성하고 싶다면<br />
+                    크레딧을 충전해 보세요!
+                </p>
+                <div className="flex gap-3 w-full">
+                    <button
+                        onClick={onClose}
+                        className="flex-1 py-3 px-6 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-semibold transition-all border border-white/5"
+                    >
+                        확인
+                    </button>
+                    <button
+                        onClick={onGoToStore}
+                        className="flex-1 py-3 px-6 rounded-2xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/20 active:scale-95"
+                    >
+                        추가 생성하기
+                    </button>
+                </div>
+            </div>
+        </DialogContent>
+    </Dialog>
 );
 
 // --- The PromptBox Component ---
@@ -311,6 +302,7 @@ export const PromptBox = React.forwardRef<
     React.TextareaHTMLAttributes<HTMLTextAreaElement>
 >(({ className, ...props }, ref) => {
     const { user } = useAuth();
+    const router = useRouter();
     const [genre, setGenre] = React.useState("");
     const [personality, setPersonality] = React.useState("");
     const [concept, setConcept] = React.useState("");
@@ -359,6 +351,12 @@ export const PromptBox = React.forwardRef<
         setGeneratedStory(null);
         setIsNoCredits(false);
 
+        if (usedCount >= 1 && credits <= 0) {
+            setIsNoCredits(true);
+            setIsGenerating(false);
+            return;
+        }
+
         try {
             const response = await fetch('/api/generate-story', {
                 method: 'POST',
@@ -366,12 +364,16 @@ export const PromptBox = React.forwardRef<
                 body: JSON.stringify({ genre, personality, concept, userId: user.id }),
             });
 
-            const data = await response.json();
-
-            if (response.status === 403 && data.error === "NO_CREDITS") {
-                setIsNoCredits(true);
-                return;
+            if (response.status === 403) {
+                const data = await response.json();
+                if (data.error === "NO_CREDITS") {
+                    setIsNoCredits(true);
+                    setIsGenerating(false);
+                    return;
+                }
             }
+
+            const data = await response.json();
 
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to generate story');
@@ -401,8 +403,11 @@ export const PromptBox = React.forwardRef<
             {isGenerating && <GeneratingOverlay />}
 
             <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto">
-                {/* 크레딧 부족 배너 */}
-                {isNoCredits && <NoCreditsBanner />}
+                <NoCreditsDialog
+                    isOpen={isNoCredits}
+                    onClose={() => setIsNoCredits(false)}
+                    onGoToStore={() => router.push('/store')}
+                />
 
                 {/* 입력 폼 - 크레딧 부족 시 폼 숨김 */}
                 {!isNoCredits && (
