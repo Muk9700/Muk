@@ -322,10 +322,12 @@ export const PromptBox = React.forwardRef<
         }
 
         if (!user) {
+            console.error('[PromptBox] No user found in context');
             setError("로그인이 필요합니다.");
             return;
         }
 
+        console.log('[PromptBox] Submitting story request for user:', user.id);
         setIsGenerating(true);
         setError(null);
         setGeneratedStory(null);
