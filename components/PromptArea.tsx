@@ -4,11 +4,7 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useAuth } from "@/contexts/AuthContext";
 
-// --- Utility Function ---
-type ClassValue = string | number | boolean | null | undefined;
-function cn(...inputs: ClassValue[]): string {
-    return inputs.filter(Boolean).join(" ");
-}
+import { cn } from "@/lib/utils";
 
 // --- Radix Primitives ---
 const TooltipProvider = TooltipPrimitive.Provider;

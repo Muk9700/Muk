@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { LEMON_SQUEEZY_PRODUCTS, ProductType } from "@/lib/lemonsqueezy/config";
+import { cn } from "@/lib/utils";
 
 const StorePage = () => {
     const { user, loading } = useAuth();
