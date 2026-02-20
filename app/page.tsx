@@ -47,92 +47,166 @@ export default function Home() {
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
-          padding: '8px 12px',
-          borderRadius: 10,
-          background: 'rgba(255, 255, 255, 0.12)',
-          backdropFilter: 'blur(10px) saturate(120%)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
         }}>
-          {user.user_metadata?.avatar_url && (
-            <img
-              src={user.user_metadata.avatar_url}
-              alt="Profile"
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-              }}
-            />
-          )}
-          <span style={{
-            color: '#ffffff',
-            fontSize: '0.9rem',
-            fontWeight: 600,
-            fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
-          }}>
-            {user.user_metadata?.full_name || user.email}
-          </span>
+          {/* Store Button */}
           <button
-            onClick={signOut}
+            onClick={() => router.push('/store')}
             style={{
-              padding: '6px 12px',
-              borderRadius: 6,
-              background: 'rgba(239, 68, 68, 0.2)',
-              border: '1px solid rgba(239, 68, 68, 0.4)',
-              color: '#fca5a5',
-              fontSize: '0.85rem',
-              fontWeight: 600,
+              width: 44,
+              height: 44,
+              borderRadius: 10,
+              background: 'rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(10px) saturate(120%)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
+              color: '#ffffff',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(239, 68, 68, 0.3)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
+              e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
-            Sign Out
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+            </svg>
           </button>
-        </div>
-      ) : (
-        <Link
-          href="/auth"
-          style={{
-            position: 'fixed',
-            top: 'min(6vw, 32px)',
-            right: 'min(6vw, 32px)',
-            zIndex: 100,
-            padding: '10px 20px',
+
+          {/* User Info & Logout */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '8px 12px',
             borderRadius: 10,
             background: 'rgba(255, 255, 255, 0.12)',
             backdropFilter: 'blur(10px) saturate(120%)',
             border: '1px solid rgba(255, 255, 255, 0.2)',
-            color: '#ffffff',
-            textDecoration: 'none',
-            fontSize: '0.95rem',
-            fontWeight: 600,
-            fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            transition: 'all 0.2s ease',
-            display: 'inline-block',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.18)';
-            e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-          }}
-        >
-          Login
-        </Link>
+          }}>
+            {user.user_metadata?.avatar_url && (
+              <img
+                src={user.user_metadata.avatar_url}
+                alt="Profile"
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  border: '2px solid rgba(255, 255, 255, 0.3)',
+                }}
+              />
+            )}
+            <span style={{
+              color: '#ffffff',
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
+            }}>
+              {user.user_metadata?.full_name || user.email}
+            </span>
+            <button
+              onClick={signOut}
+              style={{
+                padding: '6px 12px',
+                borderRadius: 6,
+                background: 'rgba(239, 68, 68, 0.2)',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                color: '#fca5a5',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)';
+              }}
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div style={{
+          position: 'fixed',
+          top: 'min(6vw, 32px)',
+          right: 'min(6vw, 32px)',
+          zIndex: 100,
+          display: 'flex',
+          gap: '12px',
+        }}>
+          <button
+            onClick={() => router.push('/store')}
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 10,
+              background: 'rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(10px) saturate(120%)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              color: '#ffffff',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+            </svg>
+          </button>
+          <Link
+            href="/auth"
+            style={{
+              padding: '10px 20px',
+              borderRadius: 10,
+              background: 'rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(10px) saturate(120%)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              color: '#ffffff',
+              textDecoration: 'none',
+              fontSize: '0.95rem',
+              fontWeight: 600,
+              fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              transition: 'all 0.2s ease',
+              display: 'inline-block',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.18)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            }}
+          >
+            Login
+          </Link>
+        </div>
       )}
 
       {/* Font import */}

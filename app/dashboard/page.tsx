@@ -84,6 +84,38 @@ export default function DashboardPage() {
                     alignItems: 'center',
                     gap: '8px',
                 }}>
+                    {/* Share Button or Store Link (Optional) */}
+                    <button
+                        onClick={() => router.push('/store')}
+                        style={{
+                            width: 48,
+                            height: 48,
+                            borderRadius: '50%',
+                            background: 'rgba(255, 255, 255, 0.12)',
+                            backdropFilter: 'blur(10px)',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            color: '#ffffff',
+                            transition: 'all 0.3s ease',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
+                            e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                        </svg>
+                    </button>
+
                     {/* Profile Picture Button */}
                     <button style={{
                         width: 48,

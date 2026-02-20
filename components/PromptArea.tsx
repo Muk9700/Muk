@@ -319,7 +319,7 @@ export const PromptBox = React.forwardRef<
     // 컴포넌트 마운트 시 크레딧 조회
     React.useEffect(() => {
         if (user) {
-            fetch(`/api/user/credits?userId=${user.id}`)
+            fetch(`/api/user/credits?userId=${user.id}&t=${Date.now()}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data && typeof data.credits === 'number') {
