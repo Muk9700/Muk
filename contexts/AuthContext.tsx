@@ -33,11 +33,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         // Get initial session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            setLoading(false);
-        });
+        supabase.auth.getSession()
+            .then(({ data: { session }, error }) => {
+                if (error) {
+                    console.error('Error getting session:', error.message);
+                    // 세션 에러 발생 시(ex: Refresh Token 에러) 상태 초기화
+                    setSession(null);
+                    setUser(null);
+                } else {
+                    setSession(session);
+                    setUser(session?.user ?? null);
+                }
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error('Unexpected auth error:', err);
+                setLoading(false);
+            });
 
         // Listen for auth changes
         const {
