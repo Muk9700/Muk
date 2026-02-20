@@ -10,12 +10,7 @@ export default function Home() {
   const { user, loading, signOut } = useAuth();
   const router = useRouter();
 
-  // Redirect to dashboard if user is logged in
-  useEffect(() => {
-    if (!loading && user) {
-      router.push('/dashboard');
-    }
-  }, [user, loading, router]);
+  // Redirect logic removed to allow logged-in users to visit home page via dashboard link
 
   return (
     <main style={{ position: 'relative' }}>
