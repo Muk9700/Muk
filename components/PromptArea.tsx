@@ -348,31 +348,54 @@ export const PromptBox = React.forwardRef<
     const [copied, setCopied] = React.useState(false);
     const [creditsLoaded, setCreditsLoaded] = React.useState(false);
 
-    // 크레딧 데이터
-    const [credits, setCredits] = React.useState<number>(0);
-    const [usedCount, setUsedCount] = React.useState<number>(0);
+    // 크레딧 데이터 (localStorage를 초기값으로 사용하여 깜빡임 방지)
+    const [credits, setCredits] = React.useState<number>(() => {
+        if (typeof window !== 'undefined') {
+            return Number(localStorage.getItem('user_credits') || 0);
+        }
+        return 0;
+    });
+    const [usedCount, setUsedCount] = React.useState<number>(() => {
+        if (typeof window !== 'undefined') {
+            return Number(localStorage.getItem('user_used_count') || 0);
+        }
+        return 0;
+    });
 
-    // 컴포넌트 마운트 시 크레딧 조회
-    React.useEffect(() => {
-        if (user) {
-            fetch(`/api/user/credits?userId=${user.id}&t=${Date.now()}`, {
-                cache: 'no-store', // 브라우저 캐시 강제 무시
+    // 크레딧 데이터 조회 함수 (재사용 가능하게 분리)
+    const refreshCredits = React.useCallback(async () => {
+        if (!user) return;
+        try {
+            const res = await fetch(`/api/user/credits?userId=${user.id}&t=${Date.now()}`, {
+                cache: 'no-store',
                 headers: { 'Pragma': 'no-cache', 'Cache-Control': 'no-cache' }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data && typeof data.credits === 'number') {
-                        setCredits(data.credits);
-                        setUsedCount(data.count);
-                    }
-                    setCreditsLoaded(true);
-                })
-                .catch(err => {
-                    console.error("Error fetching credits:", err);
-                    setCreditsLoaded(true); // 에러 발생 시에도 계속 기다리지 않도록 처리
-                });
+            });
+            const data = await res.json();
+            if (data && typeof data.credits === 'number') {
+                setCredits(data.credits);
+                setUsedCount(data.count);
+                // 즉시 반영을 위해 로컬스토리지 저장
+                localStorage.setItem('user_credits', String(data.credits));
+                localStorage.setItem('user_used_count', String(data.count));
+            }
+        } catch (err) {
+            console.error("Error refreshing credits:", err);
+        } finally {
+            setCreditsLoaded(true);
         }
     }, [user]);
+
+    // 컴포넌트 마운트 및 포커스 시 크레딧 조회
+    React.useEffect(() => {
+        if (user) {
+            refreshCredits();
+
+            // 상점 다녀오거나 창 전환 시 자동 갱신
+            const handleFocus = () => refreshCredits();
+            window.addEventListener('focus', handleFocus);
+            return () => window.removeEventListener('focus', handleFocus);
+        }
+    }, [user, refreshCredits]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -425,8 +448,14 @@ export const PromptBox = React.forwardRef<
             }
 
             setGeneratedStory(data.story);
-            if (data.credits !== undefined) setCredits(data.credits);
-            if (data.usedCount !== undefined) setUsedCount(data.usedCount);
+            if (data.credits !== undefined) {
+                setCredits(data.credits);
+                localStorage.setItem('user_credits', String(data.credits));
+            }
+            if (data.usedCount !== undefined) {
+                setUsedCount(data.usedCount);
+                localStorage.setItem('user_used_count', String(data.usedCount));
+            }
         } catch (err: any) {
             console.error('Error generating story:', err);
             setError(err.message || '소설 생성 중 오류가 발생했습니다.');
@@ -507,7 +536,12 @@ export const PromptBox = React.forwardRef<
                         <div className="relative z-10 flex items-center justify-between mt-2">
                             {/* 안내 및 잔여 크레딧 */}
                             <div className="flex flex-col gap-1 pl-2">
-                                {usedCount < 1 ? (
+                                {!creditsLoaded ? (
+                                    <span className="text-white/30 text-[0.8rem] animate-pulse flex items-center gap-1.5">
+                                        <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-ping" />
+                                        상태 동기화 중...
+                                    </span>
+                                ) : usedCount < 1 ? (
                                     <span style={{
                                         fontSize: "0.85rem",
                                         color: "#fca5a5",
