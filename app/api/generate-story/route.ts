@@ -33,7 +33,7 @@ Include a title and the full story text.
 Structure the output beautifully with proper spacing and paragraphs.`;
 
         const response = await ai.models.generateContent({
-            model: "gemini-flash-latest",
+            model: "gemini-2.5-flash-lite",
             contents: prompt,
         });
 
