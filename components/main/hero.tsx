@@ -49,13 +49,10 @@ export default function BlueHourHero() {
                     장르와 컨셉만 선택하면 한 편의 감성적인 소설로 피어납니다.
                 </p>
 
-                <div className="flex flex-wrap items-center justify-center gap-4 mb-24 w-full px-4">
-                    <Link href={user ? "/dashboard" : "/auth"} className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold text-lg shadow-[0_0_40px_rgba(99,102,241,0.3)] hover:shadow-[0_0_60px_rgba(99,102,241,0.5)] transition-all transform hover:-translate-y-1 active:scale-95 text-center">
+                <div className="flex items-center justify-center mb-24 w-full px-4">
+                    <Link href={user ? "/dashboard" : "/auth"} className="px-10 py-4 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold text-lg shadow-[0_0_40px_rgba(99,102,241,0.3)] hover:shadow-[0_0_60px_rgba(99,102,241,0.5)] transition-all transform hover:-translate-y-1 active:scale-95 text-center">
                         내 상상력 펼치기
                     </Link>
-                    <a href="#how-it-works" className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-lg transition-all backdrop-blur-md transform hover:-translate-y-1 active:scale-95 text-center">
-                        이용 방법
-                    </a>
                 </div>
 
                 <div className="w-full text-left mb-6 px-2 flex justify-between items-end">

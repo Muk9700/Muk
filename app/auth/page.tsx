@@ -36,50 +36,85 @@ export default function AuthPage() {
         <main className="auth-main">
             {/* Left Section - 60% */}
             <div className="auth-left">
+                {/* Artwork Background Layers */}
+                <div className="absolute inset-0 z-0">
+                    <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-overlay animate-pulse"
+                        style={{ backgroundImage: 'url("/images/theme_fantasy.webp")', animationDuration: '8s' }} />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#0A0D14] via-[#0A0D14]/80 to-transparent z-10" />
+
+                    {/* Floating Illustration Cards */}
+                    <div className="absolute top-[10%] right-[10%] w-64 h-80 rounded-3xl overflow-hidden border border-white/10 shadow-2xl rotate-3 opacity-60 hidden xl:block animate-float">
+                        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/images/theme_historical.webp")' }} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    </div>
+                    <div className="absolute bottom-[15%] left-[15%] w-56 h-72 rounded-3xl overflow-hidden border border-white/10 shadow-2xl -rotate-6 opacity-50 hidden xl:block animate-float-delayed">
+                        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/images/theme_office.webp")' }} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    </div>
+                </div>
+
                 {/* Content */}
-                <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ position: 'relative', zIndex: 10 }} className="flex flex-col gap-8">
                     <div style={{
                         display: 'inline-block',
+                        alignSelf: 'flex-start',
                         padding: '12px 24px',
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        borderRadius: 12,
-                        boxShadow: '0 8px 24px rgba(102, 126, 234, 0.25)',
+                        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.4) 100%)',
+                        borderRadius: 16,
+                        backdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
                     }}>
                         <span style={{
                             fontSize: 'clamp(0.85rem, 1.2vw, 1rem)',
                             fontWeight: 700,
                             color: '#ffffff',
-                            letterSpacing: '0.08em',
-                            fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
+                            letterSpacing: '0.15em',
+                            fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
+                            textShadow: '0 2px 4px rgba(0,0,0,0.3)'
                         }}>
-                            BL NOVEL AI
+                            BLUE HOUR • NOVEL AI
                         </span>
                     </div>
-                </div>
 
-                {/* Bottom - BL Novel AI */}
-                <div style={{ position: 'relative', zIndex: 1 }}>
-                    <h2 style={{
-                        fontSize: 'clamp(3rem, 8vw, 7rem)',
-                        fontWeight: 900,
-                        color: '#ffffff',
-                        margin: 0,
-                        lineHeight: 0.9,
-                        letterSpacing: '-0.02em',
-                        fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
-                        textTransform: 'uppercase',
-                    }}>
-                        BL<br />소설 AI
-                    </h2>
-                    <p style={{
-                        fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-                        color: 'rgba(255, 255, 255, 0.7)',
-                        marginTop: '1.5rem',
-                        maxWidth: '500px',
-                        fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
-                    }}>
-                        장르, 성격, 컨셉만 입력하면 나만의 BL 단편 소설을 완성해드립니다.
-                    </p>
+                    <div className="flex flex-col gap-4">
+                        <h2 style={{
+                            fontSize: 'clamp(3.5rem, 8vw, 8rem)',
+                            fontWeight: 900,
+                            color: '#ffffff',
+                            margin: 0,
+                            lineHeight: 0.9,
+                            letterSpacing: '-0.04em',
+                            fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
+                            textTransform: 'uppercase',
+                        }}>
+                            BL<br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">소설 AI</span>
+                        </h2>
+                        <div className="w-24 h-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" />
+                        <p style={{
+                            fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
+                            color: 'rgba(255, 255, 255, 0.9)',
+                            marginTop: '1rem',
+                            maxWidth: '540px',
+                            fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
+                            lineHeight: 1.6,
+                            fontWeight: 300,
+                        }}>
+                            <strong className="text-indigo-300 font-semibold">장르, 성격, 컨셉</strong>만 입력하면<br />
+                            당신이 꿈꾸던 <span className="underline decoration-indigo-500/50 underline-offset-4">나만의 BL 소설</span>을<br />
+                            완벽한 감성으로 완성해드립니다.
+                        </p>
+                    </div>
+
+                    {/* Theme Badges */}
+                    <div className="flex flex-wrap gap-3 mt-4">
+                        {['사극', '오피스', '판타지', '아이돌'].map(theme => (
+                            <span key={theme} className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-white/60 backdrop-blur-md">
+                                #{theme}
+                            </span>
+                        ))}
+                    </div>
                 </div>
             </div>
 
@@ -236,24 +271,43 @@ export default function AuthPage() {
                     overflow-x: hidden;
                 }
                 
+                /* 모바일 화면 대응 강화를 위해 z-index 조정 */
                 .auth-left {
                     flex: 3;
                     position: relative;
-                    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2a 100%);
+                    background: #0A0D14;
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-between;
+                    justify-content: center;
                     padding: min(8vw, 80px);
+                    overflow: hidden;
+                }
+
+                @keyframes float {
+                    0%, 100% { transform: translateY(0) rotate(3deg); }
+                    50% { transform: translateY(-20px) rotate(4deg); }
+                }
+                @keyframes float-delayed {
+                    0%, 100% { transform: translateY(0) rotate(-6deg); }
+                    50% { transform: translateY(-15px) rotate(-5deg); }
+                }
+                .animate-float {
+                    animation: float 6s ease-in-out infinite;
+                }
+                .animate-float-delayed {
+                    animation: float-delayed 8s ease-in-out infinite;
                 }
                 
                 .auth-right {
                     flex: 2;
                     position: relative;
-                    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+                    background: radial-gradient(circle at center, #1a1a2a 0%, #0A0D14 100%);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     padding: min(6vw, 64px);
+                    box-shadow: -20px 0 60px rgba(0,0,0,0.5);
+                    z-index: 20;
                 }
                 
                 /* Mobile Responsive: 768px 이하 */

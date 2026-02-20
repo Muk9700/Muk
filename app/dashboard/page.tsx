@@ -66,6 +66,46 @@ export default function DashboardPage() {
                 }} />
             </div>
 
+            {/* Home Navigation Button - Top Left */}
+            <div style={{
+                position: 'fixed',
+                top: '32px',
+                left: '32px',
+                zIndex: 100,
+            }}>
+                <button
+                    onClick={() => router.push('/')}
+                    title="홈으로 이동"
+                    style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: '16px',
+                        background: 'rgba(255, 255, 255, 0.12)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        color: '#ffffff',
+                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                        e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
+                        e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                    }}
+                >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                </button>
+            </div>
+
             {/* Profile Popover - Top Right */}
             <div
                 style={{
