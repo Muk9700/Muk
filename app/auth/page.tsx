@@ -1,17 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { signInWithGoogle } from '@/lib/supabase/client';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { signInWithGoogle } from "@/lib/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSelector from "@/components/main/LanguageSelector";
 import Footer from '@/components/main/Footer';
 
 export default function AuthPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { user } = useAuth();
+    const { t } = useLanguage();
     const router = useRouter();
+
+
 
     // Redirect to dashboard if already logged in
     useEffect(() => {
@@ -25,10 +30,10 @@ export default function AuthPage() {
             setIsLoading(true);
             setError(null);
             await signInWithGoogle();
-            // The OAuth flow will redirect automatically to /dashboard
-        } catch (err) {
+        } catch (err: any) {
             console.error('Sign in error:', err);
-            setError('Failed to sign in. Please try again.');
+            setError(err.message || 'Failed to sign in. Please try again.');
+        } finally {
             setIsLoading(false);
         }
     };
@@ -90,7 +95,7 @@ export default function AuthPage() {
                                 fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
                                 textTransform: 'uppercase',
                             }}>
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">AI NOVELIST</span>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">{t.hero.badge}</span>
                             </h2>
                             <div className="w-24 h-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" />
                             <p style={{
@@ -108,7 +113,7 @@ export default function AuthPage() {
 
                         {/* Theme Badges */}
                         <div className="flex flex-wrap gap-3 mt-4">
-                            {['Historical Epic', 'Corporate Mystery', 'Epic Fantasy', 'Modern Fame'].map(theme => (
+                            {[t.themes.historical.title, t.themes.office.title, t.themes.fantasy.title, t.themes.idol.title].map(theme => (
                                 <span key={theme} className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-white/60 backdrop-blur-md">
                                     #{theme}
                                 </span>
@@ -155,6 +160,9 @@ export default function AuthPage() {
                             <path d="M12.5 15L7.5 10L12.5 5" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </Link>
+                    <div style={{ position: 'fixed', top: '2rem', right: '2rem', zIndex: 100 }}>
+                        <LanguageSelector />
+                    </div>
 
                     {/* Auth card */}
                     <div style={{
@@ -180,7 +188,7 @@ export default function AuthPage() {
                                 marginBottom: '0.5rem',
                                 fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
                             }}>
-                                Welcome Back
+                                {t.auth.welcome}
                             </h2>
                             <p style={{
                                 fontSize: '0.95rem',
@@ -188,7 +196,7 @@ export default function AuthPage() {
                                 margin: 0,
                                 fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
                             }}>
-                                Sign in to continue your creative journey
+                                {t.auth.desc}
                             </p>
                         </div>
 

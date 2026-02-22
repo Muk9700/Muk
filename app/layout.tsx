@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   description: "웹툰 스타일 미소년 단편 소설 생성 서비스",
 };
 
+import { LanguageProvider } from "@/contexts/LanguageContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,7 +31,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          {children}
+          <LanguageProvider>
+            {children}
+          </LanguageProvider>
         </AuthProvider>
       </body>
     </html>

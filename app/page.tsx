@@ -6,9 +6,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Footer from '@/components/main/Footer';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSelector from '@/components/main/LanguageSelector';
 
 export default function Home() {
   const { user, loading, signOut, credits } = useAuth();
+  const { t } = useLanguage();
   const router = useRouter();
 
   return (
@@ -30,7 +33,7 @@ export default function Home() {
           fontWeight: 600,
           fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
         }}>
-          Syncing...
+          {t.common.loading}
         </div>
       ) : user ? (
         <div style={{
@@ -42,6 +45,7 @@ export default function Home() {
           alignItems: 'center',
           gap: '12px',
         }}>
+          <LanguageSelector />
           {/* Credit Display */}
           <div style={{
             display: 'flex',
@@ -115,7 +119,7 @@ export default function Home() {
                 e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
               }}
             >
-              Log Out
+              {t.common.signOut}
             </button>
           </div>
         </div>
@@ -128,6 +132,7 @@ export default function Home() {
           display: 'flex',
           gap: '12px',
         }}>
+          <LanguageSelector />
           <Link
             href="/auth"
             style={{
@@ -153,7 +158,7 @@ export default function Home() {
               e.currentTarget.style.boxShadow = '0 4px 15px rgba(99, 102, 241, 0.35)';
             }}
           >
-            Sign In
+            {t.common.signIn}
           </Link>
         </div>
       )}
@@ -185,7 +190,7 @@ export default function Home() {
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
           }}>
-            How It Works
+            {t.howItWorks.title}
           </h2>
 
           <div style={{
@@ -216,10 +221,10 @@ export default function Home() {
                 </svg>
               </div>
               <h3 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#e0e7ff' }}>
-                1. Set the Stage
+                {t.howItWorks.step1.title}
               </h3>
               <p style={{ opacity: 0.7, lineHeight: 1.7, margin: 0, fontSize: '1rem' }}>
-                Choose your genre, protagonist's personality, and a unique concept for your story.
+                {t.howItWorks.step1.desc}
               </p>
             </div>
 
@@ -249,10 +254,10 @@ export default function Home() {
                 </svg>
               </div>
               <h3 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#e0e7ff' }}>
-                2. AI Manifestation
+                {t.howItWorks.step2.title}
               </h3>
               <p style={{ opacity: 0.7, lineHeight: 1.7, margin: 0, fontSize: '1rem' }}>
-                Our advanced AI crafts a soul-stirring short story based on your creative inputs.
+                {t.howItWorks.step2.desc}
               </p>
             </div>
 
@@ -288,10 +293,10 @@ export default function Home() {
                 </svg>
               </div>
               <h3 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#e0e7ff' }}>
-                3. Read & Cherish
+                {t.howItWorks.step3.title}
               </h3>
               <p style={{ opacity: 0.7, lineHeight: 1.7, margin: 0, fontSize: '1rem' }}>
-                Dive into your story, save your favorites, and share the magic with others.
+                {t.howItWorks.step3.desc}
               </p>
             </div>
           </div>

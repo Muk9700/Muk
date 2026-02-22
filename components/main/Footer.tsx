@@ -1,8 +1,10 @@
 'use client';
 
 import React from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Footer() {
+    const { t } = useLanguage();
     return (
         <footer style={{
             width: '100%',
@@ -43,7 +45,7 @@ export default function Footer() {
                         maxWidth: '400px',
                         lineHeight: 1.6,
                     }}>
-                        Crafting emotional BL narratives with the power of artificial intelligence.
+                        {t.common.footerDesc}
                     </p>
                 </div>
 
@@ -63,7 +65,7 @@ export default function Footer() {
                         color: '#a5b4fc',
                         fontWeight: 600,
                     }}>
-                        Customer Support & Inquiries
+                        {t.common.supportTitle}
                     </span>
                     <a
                         href="mailto:nextactionclubkr@gmail.com"
@@ -84,7 +86,7 @@ export default function Footer() {
                         color: 'rgba(255, 255, 255, 0.4)',
                         margin: 0,
                     }}>
-                        For refunds, technical support, or partnership inquiries.
+                        {t.common.supportDesc}
                     </p>
                 </div>
 

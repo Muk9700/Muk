@@ -3,17 +3,19 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function BlueHourHero() {
     const [mounted, setMounted] = useState(false);
     const { user } = useAuth();
+    const { t } = useLanguage();
     useEffect(() => setMounted(true), []);
 
     const themes = [
-        { id: 'historical', title: 'Eternal Sands', subtitle: 'A sweeping historical epic of power and sacrifice', color: 'from-amber-900/40 to-orange-900/40' },
-        { id: 'office', title: 'Corporate Intrigue', subtitle: 'A high-stakes thriller in the concrete jungle', color: 'from-slate-800/40 to-blue-900/40' },
-        { id: 'fantasy', title: 'Arcane Destiny', subtitle: 'Where magic and swords determine the fate of empires', color: 'from-purple-900/40 to-fuchsia-900/40' },
-        { id: 'idol', title: 'Modern Fame', subtitle: 'The hidden price of the spotlight in the digital age', color: 'from-cyan-900/40 to-blue-900/40' },
+        { id: 'historical', title: t.themes.historical.title, subtitle: t.themes.historical.subtitle, color: 'from-amber-900/40 to-orange-900/40' },
+        { id: 'office', title: t.themes.office.title, subtitle: t.themes.office.subtitle, color: 'from-slate-800/40 to-blue-900/40' },
+        { id: 'fantasy', title: t.themes.fantasy.title, subtitle: t.themes.fantasy.subtitle, color: 'from-purple-900/40 to-fuchsia-900/40' },
+        { id: 'idol', title: t.themes.idol.title, subtitle: t.themes.idol.subtitle, color: 'from-cyan-900/40 to-blue-900/40' },
     ];
 
     return (
@@ -36,28 +38,27 @@ export default function BlueHourHero() {
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-20 lg:py-32 flex flex-col items-center text-center">
                 <div className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 backdrop-blur-md">
                     <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse shadow-[0_0_8px_rgba(129,140,248,0.8)]"></span>
-                    <span className="text-sm font-medium text-indigo-200 tracking-wider">AI-Powered Storytelling, Bl_ueHour</span>
+                    <span className="text-sm font-medium text-indigo-200 tracking-wider font-sans uppercase">{t.hero.badge}</span>
                 </div>
 
                 <h1 className="text-6xl md:text-8xl font-bold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-100 to-purple-200 drop-shadow-sm" style={{ fontFamily: "'Space Grotesk', ui-sans-serif, system-ui" }}>
-                    Bl_ueHour
+                    {t.hero.title}
                 </h1>
 
                 <p className="text-lg md:text-xl text-indigo-100/70 mb-12 max-w-2xl font-light leading-relaxed">
-                    The most beautiful narratives you&apos;ve ever imagined.<br className="hidden md:block" />
-                    Simply choose a genre and concept to manifest your exclusive short story.
+                    {t.hero.subtitle}
                 </p>
 
                 <div className="flex items-center justify-center mb-24 w-full px-4">
                     <Link href={user ? "/dashboard" : "/auth"} className="px-10 py-4 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold text-lg shadow-[0_0_40px_rgba(99,102,241,0.3)] hover:shadow-[0_0_60px_rgba(99,102,241,0.5)] transition-all transform hover:-translate-y-1 active:scale-95 text-center">
-                        Explore Your Imagination
+                        {t.hero.cta}
                     </Link>
                 </div>
 
                 <div className="w-full text-left mb-6 px-2 flex justify-between items-end">
                     <div>
-                        <h2 className="text-2xl font-bold text-white mb-1">Popular Themes</h2>
-                        <p className="text-indigo-200/60 text-sm">Cinematic narratives crafted by Bl_ueHour AI</p>
+                        <h2 className="text-2xl font-bold text-white mb-1">{t.hero.popularThemes}</h2>
+                        <p className="text-indigo-200/60 text-sm">{t.hero.themeDesc}</p>
                     </div>
                 </div>
 

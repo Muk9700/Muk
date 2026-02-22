@@ -7,9 +7,12 @@ import { Suspense } from "react";
 import { POLAR_PRODUCTS, PolarProductType } from "@/lib/polar/config";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/main/Footer";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSelector from "@/components/main/LanguageSelector";
 
 const StorePage = () => {
     const { user, loading } = useAuth();
+    const { t } = useLanguage();
     const router = useRouter();
     const searchParams = useSearchParams();
     const isSuccess = searchParams.get('success') === 'true';
@@ -64,7 +67,7 @@ const StorePage = () => {
             <div className="min-h-screen bg-[#1c1c1c] text-white flex items-center justify-center">
                 <div className="animate-pulse space-y-4 text-center">
                     <div className="w-12 h-12 bg-purple-500/20 rounded-full mx-auto animate-bounce" />
-                    <p className="text-white/50 font-medium tracking-wider">Loading...</p>
+                    <p className="text-white/50 font-medium tracking-wider">{t.common.loading}</p>
                 </div>
             </div>
         );
@@ -83,7 +86,10 @@ const StorePage = () => {
                             <path d="m15 18-6-6 6-6" />
                         </svg>
                     </button>
-                    <h1 className="text-xl font-bold tracking-tight">Credit Shop</h1>
+                    <h1 className="text-xl font-bold tracking-tight">{t.common.credits}</h1>
+                    <div className="ml-auto">
+                        <LanguageSelector />
+                    </div>
                 </div>
             </header>
 
@@ -91,19 +97,18 @@ const StorePage = () => {
             <main className="max-w-4xl mx-auto px-6 pt-32">
                 <div className="text-center mb-16 space-y-4">
                     <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent inline-block pb-2">
-                        Fuel Your Creativity
+                        {t.store.title}
                     </h2>
                     <p className="text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
-                        Ready to write your next masterpiece?<br />
-                        Top up your credits and let your imagination roam free.
+                        {t.store.desc}
                     </p>
                 </div>
 
                 {isSuccess && (
                     <div className="mb-8 p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-center backdrop-blur-md animate-in fade-in zoom-in duration-500">
                         <div className="text-2xl mb-2">✨</div>
-                        <h3 className="text-lg font-bold mb-1">Purchase Successful!</h3>
-                        <p className="text-sm opacity-80 text-emerald-300">Your credits have been added. Start writing your next story!</p>
+                        <h3 className="text-lg font-bold mb-1">{t.store.successTitle}</h3>
+                        <p className="text-sm opacity-80 text-emerald-300">{t.store.successDesc}</p>
                     </div>
                 )}
 
@@ -121,7 +126,7 @@ const StorePage = () => {
                             <div className="flex justify-between items-start mb-6">
                                 <div>
                                     <h3 className="text-2xl font-bold text-white mb-1">
-                                        Basic Package
+                                        {t.store.basic}
                                     </h3>
                                 </div>
                                 <div className="p-3 bg-white/5 rounded-2xl text-purple-400">
@@ -140,7 +145,7 @@ const StorePage = () => {
                                     ${POLAR_PRODUCTS.STARTER.priceUSD.toLocaleString()}
                                 </div>
                                 <div className="mt-1 text-sm text-purple-400/80 font-medium">
-                                    (${(POLAR_PRODUCTS.STARTER.priceUSD / POLAR_PRODUCTS.STARTER.credits).toFixed(2)} per credit)
+                                    ({(POLAR_PRODUCTS.STARTER.priceUSD / POLAR_PRODUCTS.STARTER.credits).toFixed(2)} {t.store.perCredit})
                                 </div>
                             </div>
 
@@ -153,7 +158,7 @@ const StorePage = () => {
                                     isProcessing === 'STARTER' ? "opacity-50 cursor-not-allowed" : "active:scale-[0.98]"
                                 )}
                             >
-                                {isProcessing === 'STARTER' ? 'Preparing...' : 'Buy Now'}
+                                {isProcessing === 'STARTER' ? t.common.preparing : t.common.buyNow}
                             </button>
                         </div>
                     </div>
@@ -170,7 +175,7 @@ const StorePage = () => {
                             <div className="flex justify-between items-start mb-6">
                                 <div>
                                     <h3 className="text-2xl font-bold text-white mb-1">
-                                        Premium Bundle
+                                        {t.store.premium}
                                     </h3>
                                 </div>
                                 <div className="p-3 bg-pink-500/10 rounded-2xl text-pink-400">
@@ -189,7 +194,7 @@ const StorePage = () => {
                                     ${POLAR_PRODUCTS.AUTHORS_CHOICE.priceUSD.toLocaleString()}
                                 </div>
                                 <div className="mt-1 text-sm text-pink-400/80 font-medium">
-                                    (${(POLAR_PRODUCTS.AUTHORS_CHOICE.priceUSD / POLAR_PRODUCTS.AUTHORS_CHOICE.credits).toFixed(2)} per credit)
+                                    ({(POLAR_PRODUCTS.AUTHORS_CHOICE.priceUSD / POLAR_PRODUCTS.AUTHORS_CHOICE.credits).toFixed(2)} {t.store.perCredit})
                                 </div>
                             </div>
 
@@ -202,15 +207,15 @@ const StorePage = () => {
                                     isProcessing === 'AUTHORS_CHOICE' ? "opacity-50 cursor-not-allowed filter grayscale" : "hover:shadow-pink-500/25 hover:scale-[1.02] active:scale-[0.98]"
                                 )}
                             >
-                                {isProcessing === 'AUTHORS_CHOICE' ? 'Preparing...' : 'Buy Now'}
+                                {isProcessing === 'AUTHORS_CHOICE' ? t.common.preparing : t.common.buyNow}
                             </button>
                         </div>
                     </div>
                 </div>
 
                 <p className="text-center mt-12 text-sm text-white/40 font-medium">
-                    All transactions are securely processed by Polar.sh.<br />
-                    Credits are non-refundable and intended for in-app use. Please choose your package thoughtfully.
+                    {t.common.footer}<br />
+                    {t.common.nonRefundable}
                 </p>
             </main>
             <Footer />
@@ -224,7 +229,7 @@ const StorePageWrapper = () => {
             <div className="min-h-screen bg-[#1c1c1c] text-white flex items-center justify-center">
                 <div className="animate-pulse space-y-4 text-center">
                     <div className="w-12 h-12 bg-purple-500/20 rounded-full mx-auto animate-bounce" />
-                    <p className="text-white/50 font-medium tracking-wider">Syncing...</p>
+                    <p className="text-white/50 font-medium tracking-wider">Loading...</p>
                 </div>
             </div>
         }>
