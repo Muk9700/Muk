@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { POLAR_PRODUCTS, PolarProductType } from "@/lib/polar/config";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/main/Footer";
@@ -10,6 +11,8 @@ import Footer from "@/components/main/Footer";
 const StorePage = () => {
     const { user, loading } = useAuth();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const isSuccess = searchParams.get('success') === 'true';
     const [isProcessing, setIsProcessing] = useState<PolarProductType | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -91,10 +94,18 @@ const StorePage = () => {
                         Fuel Your Creativity
                     </h2>
                     <p className="text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
-                        Used all your free generation credits?<br />
-                        Top up and keep crafting your unique BL short stories.
+                        Ready to write your next masterpiece?<br />
+                        Top up your credits and let your imagination roam free.
                     </p>
                 </div>
+
+                {isSuccess && (
+                    <div className="mb-8 p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-center backdrop-blur-md animate-in fade-in zoom-in duration-500">
+                        <div className="text-2xl mb-2">✨</div>
+                        <h3 className="text-lg font-bold mb-1">Purchase Successful!</h3>
+                        <p className="text-sm opacity-80 text-emerald-300">Your credits have been added. Start writing your next story!</p>
+                    </div>
+                )}
 
                 {error && (
                     <div className="mb-8 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-center text-sm font-medium backdrop-blur-sm">
@@ -200,8 +211,8 @@ const StorePage = () => {
                 </div>
 
                 <p className="text-center mt-12 text-sm text-white/40 font-medium">
-                    Payments are securely handled by Polar.sh.<br />
-                    Purchased credits are non-refundable. Please choose carefully.
+                    All transactions are securely processed by Polar.sh.<br />
+                    Credits are non-refundable and intended for in-app use. Please choose your package thoughtfully.
                 </p>
             </main>
             <Footer />
@@ -209,4 +220,19 @@ const StorePage = () => {
     );
 };
 
-export default StorePage;
+const StorePageWrapper = () => {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-[#1c1c1c] text-white flex items-center justify-center">
+                <div className="animate-pulse space-y-4 text-center">
+                    <div className="w-12 h-12 bg-purple-500/20 rounded-full mx-auto animate-bounce" />
+                    <p className="text-white/50 font-medium tracking-wider">Syncing...</p>
+                </div>
+            </div>
+        }>
+            <StorePage />
+        </Suspense>
+    );
+};
+
+export default StorePageWrapper;
