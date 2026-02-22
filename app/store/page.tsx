@@ -121,9 +121,8 @@ const StorePage = () => {
                             <div className="flex justify-between items-start mb-6">
                                 <div>
                                     <h3 className="text-2xl font-bold text-white mb-1">
-                                        {POLAR_PRODUCTS.STARTER.name}
+                                        Basic Package
                                     </h3>
-                                    <p className="text-white/50 text-sm">Perfect for beginners</p>
                                 </div>
                                 <div className="p-3 bg-white/5 rounded-2xl text-purple-400">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3" /><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 2.83-2.83Z" /><path d="m6 13 3 3a1 1 0 1 1-3 3" /></svg>
@@ -171,9 +170,8 @@ const StorePage = () => {
                             <div className="flex justify-between items-start mb-6">
                                 <div>
                                     <h3 className="text-2xl font-bold text-white mb-1">
-                                        {POLAR_PRODUCTS.AUTHORS_CHOICE.name}
+                                        Premium Bundle
                                     </h3>
-                                    <p className="text-white/50 text-sm">For serious storytellers</p>
                                 </div>
                                 <div className="p-3 bg-pink-500/10 rounded-2xl text-pink-400">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /><path d="m8 9 2.5 2.5L14 8" /></svg>
