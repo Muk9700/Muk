@@ -48,6 +48,41 @@ export const translations = {
             basic: "기본 패키지",
             premium: "프리미엄 번들",
             perCredit: "크레딧당"
+        },
+        dashboard: {
+            overlay: {
+                phase1: "세계를 설계하는 중",
+                phase2: "캐릭터 소환 중",
+                phase3: "서사를 엮는 중",
+                phase4: "최종 문장 작성 중",
+                sub: "AI가 당신의 이야기를 만들고 있습니다. 잠시만 기다려 주세요."
+            },
+            dialogs: {
+                ipTitle: "무료 체험이 이미 사용되었습니다.",
+                ipDesc: "이 기기나 네트워크에서 이미 무료 이야기가 생성되었습니다. 계속하려면 크레딧을 구매해 주세요!",
+                creditsTitle: "무료 크레딧을 모두 사용하셨습니다.",
+                creditsDesc: "더 많은 이야기를 만들고 싶으신가요? 크레딧을 충전하여 마법을 이어가세요!",
+                close: "닫기",
+                maybeLater: "나중에 하기",
+                goToStore: "상점으로 가기",
+                topUp: "충전하기"
+            },
+            form: {
+                genre: "장르",
+                genrePlaceholder: "예: 현대물, 오메가버스, 캠퍼스물...",
+                personality: "캐릭터 성격",
+                personalityPlaceholder: "예: 츤데레 재벌3세, 다정하지만 집착 있는 공...",
+                concept: "플롯 컨셉",
+                conceptPlaceholder: "배경이나 구체적인 플롯 포인트를 설명해 주세요...",
+                button: "이야기 발현하기",
+                checking: "확인 중...",
+                credits: "보유 크레딧"
+            },
+            result: {
+                title: "당신의 AI 맞춤형 이야기",
+                copy: "복사",
+                copied: "복사됨!"
+            }
         }
     },
     en: {
@@ -97,6 +132,41 @@ export const translations = {
             basic: "Basic Package",
             premium: "Premium Bundle",
             perCredit: "per credit"
+        },
+        dashboard: {
+            overlay: {
+                phase1: "Architecting the world",
+                phase2: "Summoning characters",
+                phase3: "Weaving the narrative",
+                phase4: "Writing final lines",
+                sub: "Our AI is crafting your story. Please wait a moment."
+            },
+            dialogs: {
+                ipTitle: "Free trial already claimed.",
+                ipDesc: "A free story has already been generated from this device or network. Please purchase credits to continue!",
+                creditsTitle: "You've used your free credit.",
+                creditsDesc: "Want to create more stories? Top up your credits to keep the magic going!",
+                close: "Close",
+                maybeLater: "Maybe Later",
+                goToStore: "Go to Store",
+                topUp: "Top Up"
+            },
+            form: {
+                genre: "Genre",
+                genrePlaceholder: "e.g., Contemporary, Omegaverse, Campus...",
+                personality: "Character Personality",
+                personalityPlaceholder: "e.g., Tsundere CEO, Sweet but obsessive top...",
+                concept: "Plot Concept",
+                conceptPlaceholder: "Describe the setting or specific plot points...",
+                button: "Manifest Story",
+                checking: "Checking...",
+                credits: "Credits"
+            },
+            result: {
+                title: "Your AI-Crafted Story",
+                copy: "Copy",
+                copied: "Copied!"
+            }
         }
     },
     es: {
@@ -146,6 +216,41 @@ export const translations = {
             basic: "Paquete Básico",
             premium: "Paquete Premium",
             perCredit: "por crédito"
+        },
+        dashboard: {
+            overlay: {
+                phase1: "Arquitectando el mundo",
+                phase2: "Invocando personajes",
+                phase3: "Tejiendo la narrativa",
+                phase4: "Escribiendo líneas finales",
+                sub: "Nuestra IA está creando tu historia. Por favor espera un momento."
+            },
+            dialogs: {
+                ipTitle: "Prueba gratuita ya reclamada.",
+                ipDesc: "Ya se ha generado una historia gratuita desde este dispositivo o red. ¡Por favor compra créditos para continuar!",
+                creditsTitle: "Has usado tu crédito gratuito.",
+                creditsDesc: "¿Quieres crear más historias? ¡Recarga tus créditos para seguir con la magia!",
+                close: "Cerrar",
+                maybeLater: "Más tarde",
+                goToStore: "Ir a la tienda",
+                topUp: "Recargar"
+            },
+            form: {
+                genre: "Género",
+                genrePlaceholder: "ej., Contemporáneo, Omegaverse, Campus...",
+                personality: "Personalidad del personaje",
+                personalityPlaceholder: "ej., CEO Tsundere, Top dulce pero obsesivo...",
+                concept: "Concepto de la trama",
+                conceptPlaceholder: "Describe el entorno o puntos específicos de la trama...",
+                button: "Manifestar historia",
+                checking: "Comprobando...",
+                credits: "Créditos"
+            },
+            result: {
+                title: "Tu historia creada por IA",
+                copy: "Copiar",
+                copied: "¡Copiado!"
+            }
         }
     }
 };

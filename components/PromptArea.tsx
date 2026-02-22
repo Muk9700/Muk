@@ -4,6 +4,7 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import { cn } from "@/lib/utils";
 
@@ -129,14 +130,15 @@ const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 // --- 로딩 오버레이 컴포넌트 (애니메이션) ---
 const GeneratingOverlay = () => {
+    const { t } = useLanguage();
     const [dots, setDots] = React.useState(".");
     const [phase, setPhase] = React.useState(0);
 
     const phases = [
-        "Architecting the world",
-        "Summoning characters",
-        "Weaving the narrative",
-        "Writing final lines",
+        t.dashboard.overlay.phase1,
+        t.dashboard.overlay.phase2,
+        t.dashboard.overlay.phase3,
+        t.dashboard.overlay.phase4,
     ];
 
     React.useEffect(() => {
@@ -218,7 +220,7 @@ const GeneratingOverlay = () => {
                     margin: "0.75rem 0 0 0",
                     fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
                 }}>
-                    Our AI is crafting your story. Please wait a moment.
+                    {t.dashboard.overlay.sub}
                 </p>
             </div>
 
@@ -257,72 +259,75 @@ const GeneratingOverlay = () => {
 };
 
 // --- 크레딧 부족 안내 다이얼로그 ---
-const IpAbuseDialog = ({ isOpen, onClose, onGoToStore }: { isOpen: boolean, onClose: () => void, onGoToStore: () => void }) => (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-[440px] border border-red-500/20 bg-[#1c1c1c]/95 backdrop-blur-2xl">
-            <div className="p-8 flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
+const IpAbuseDialog = ({ isOpen, onClose, onGoToStore }: { isOpen: boolean, onClose: () => void, onGoToStore: () => void }) => {
+    const { t } = useLanguage();
+    return (
+        <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogContent className="max-w-[440px] border border-red-500/20 bg-[#1c1c1c]/95 backdrop-blur-2xl">
+                <div className="p-8 flex flex-col items-center text-center">
+                    <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3">{t.dashboard.dialogs.ipTitle}</h3>
+                    <p className="text-white/60 mb-8 leading-relaxed">
+                        {t.dashboard.dialogs.ipDesc}
+                    </p>
+                    <div className="flex gap-3 w-full">
+                        <button
+                            onClick={onClose}
+                            className="flex-1 py-3 px-6 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-semibold transition-all border border-white/5"
+                        >
+                            {t.dashboard.dialogs.close}
+                        </button>
+                        <button
+                            onClick={onGoToStore}
+                            className="flex-1 py-3 px-6 rounded-2xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/20 active:scale-95"
+                        >
+                            {t.dashboard.dialogs.goToStore}
+                        </button>
+                    </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Free trial already claimed.</h3>
-                <p className="text-white/60 mb-8 leading-relaxed">
-                    A free story has already been generated<br />
-                    from this device or network.<br />
-                    <span className="text-white/80 font-medium">Please purchase credits to continue!</span>
-                </p>
-                <div className="flex gap-3 w-full">
-                    <button
-                        onClick={onClose}
-                        className="flex-1 py-3 px-6 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-semibold transition-all border border-white/5"
-                    >
-                        Close
-                    </button>
-                    <button
-                        onClick={onGoToStore}
-                        className="flex-1 py-3 px-6 rounded-2xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/20 active:scale-95"
-                    >
-                        Go to Store
-                    </button>
-                </div>
-            </div>
-        </DialogContent>
-    </Dialog>
-);
+            </DialogContent>
+        </Dialog>
+    );
+};
 
-const NoCreditsDialog = ({ isOpen, onClose, onGoToStore }: { isOpen: boolean, onClose: () => void, onGoToStore: () => void }) => (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-[400px] border border-white/10 bg-[#1c1c1c]/95 backdrop-blur-2xl">
-            <div className="p-8 flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-orange-500/10 flex items-center justify-center mb-6">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
-                    </svg>
+const NoCreditsDialog = ({ isOpen, onClose, onGoToStore }: { isOpen: boolean, onClose: () => void, onGoToStore: () => void }) => {
+    const { t } = useLanguage();
+    return (
+        <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogContent className="max-w-[400px] border border-white/10 bg-[#1c1c1c]/95 backdrop-blur-2xl">
+                <div className="p-8 flex flex-col items-center text-center">
+                    <div className="w-16 h-16 rounded-full bg-orange-500/10 flex items-center justify-center mb-6">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3">{t.dashboard.dialogs.creditsTitle}</h3>
+                    <p className="text-white/60 mb-8 leading-relaxed">
+                        {t.dashboard.dialogs.creditsDesc}
+                    </p>
+                    <div className="flex gap-3 w-full">
+                        <button
+                            onClick={onClose}
+                            className="flex-1 py-3 px-6 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-semibold transition-all border border-white/5"
+                        >
+                            {t.dashboard.dialogs.maybeLater}
+                        </button>
+                        <button
+                            onClick={onGoToStore}
+                            className="flex-1 py-3 px-6 rounded-2xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/20 active:scale-95"
+                        >
+                            {t.dashboard.dialogs.topUp}
+                        </button>
+                    </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">You&apos;ve used your free credit.</h3>
-                <p className="text-white/60 mb-8 leading-relaxed">
-                    Want to create more stories?<br />
-                    Top up your credits to keep the magic going!
-                </p>
-                <div className="flex gap-3 w-full">
-                    <button
-                        onClick={onClose}
-                        className="flex-1 py-3 px-6 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-semibold transition-all border border-white/5"
-                    >
-                        Maybe Later
-                    </button>
-                    <button
-                        onClick={onGoToStore}
-                        className="flex-1 py-3 px-6 rounded-2xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/20 active:scale-95"
-                    >
-                        Top Up
-                    </button>
-                </div>
-            </div>
-        </DialogContent>
-    </Dialog>
-);
+            </DialogContent>
+        </Dialog>
+    );
+};
 
 // --- The PromptBox Component ---
 export const PromptBox = React.forwardRef<
@@ -330,6 +335,7 @@ export const PromptBox = React.forwardRef<
     React.TextareaHTMLAttributes<HTMLTextAreaElement>
 >(({ className, ...props }, ref) => {
     const { user, credits, refreshCredits, loading: authLoading } = useAuth();
+    const { t } = useLanguage();
     const router = useRouter();
     const [genre, setGenre] = React.useState("");
     const [personality, setPersonality] = React.useState("");
@@ -430,36 +436,36 @@ export const PromptBox = React.forwardRef<
                         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent pointer-events-none" />
                         <div className="relative z-10 flex flex-col gap-4">
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">Genre</label>
+                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">{t.dashboard.form.genre}</label>
                                 <input
                                     type="text"
                                     value={genre}
                                     onChange={(e) => setGenre(e.target.value)}
-                                    placeholder="e.g., Contemporary, Omegaverse, Campus..."
+                                    placeholder={t.dashboard.form.genrePlaceholder}
                                     className="w-full rounded-2xl bg-[#0A0D14]/50 border border-indigo-500/30 p-3 text-indigo-50 placeholder:text-indigo-200/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-light"
                                     disabled={isGenerating}
                                 />
                             </div>
 
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">Character Personality</label>
+                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">{t.dashboard.form.personality}</label>
                                 <input
                                     type="text"
                                     value={personality}
                                     onChange={(e) => setPersonality(e.target.value)}
-                                    placeholder="e.g., Tsundere CEO, Sweet but obsessive top..."
+                                    placeholder={t.dashboard.form.personalityPlaceholder}
                                     className="w-full rounded-2xl bg-[#0A0D14]/50 border border-indigo-500/30 p-3 text-indigo-50 placeholder:text-indigo-200/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-light"
                                     disabled={isGenerating}
                                 />
                             </div>
 
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">Plot Concept</label>
+                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">{t.dashboard.form.concept}</label>
                                 <textarea
                                     rows={3}
                                     value={concept}
                                     onChange={(e) => setConcept(e.target.value)}
-                                    placeholder="Describe the setting or specific plot points..."
+                                    placeholder={t.dashboard.form.conceptPlaceholder}
                                     className="w-full rounded-2xl bg-[#0A0D14]/50 border border-indigo-500/30 p-3 text-indigo-50 placeholder:text-indigo-200/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all resize-none font-light"
                                     disabled={isGenerating}
                                 />
@@ -471,7 +477,7 @@ export const PromptBox = React.forwardRef<
                                 {authLoading ? (
                                     <span className="text-white/30 text-[0.8rem] animate-pulse flex items-center gap-1.5">
                                         <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-ping" />
-                                        Syncing...
+                                        {t.common.loading}
                                     </span>
                                 ) : (
                                     <span style={{
@@ -480,7 +486,7 @@ export const PromptBox = React.forwardRef<
                                         fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
                                         fontWeight: "500"
                                     }}>
-                                        💎 Credits: <strong className="text-white text-base">{credits ?? 0}</strong>
+                                        💎 {t.dashboard.form.credits}: <strong className="text-white text-base">{credits ?? 0}</strong>
                                     </span>
                                 )}
                             </div>
@@ -492,12 +498,12 @@ export const PromptBox = React.forwardRef<
                                 {authLoading ? (
                                     <div className="flex items-center gap-2">
                                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                        <span>Checking...</span>
+                                        <span>{t.dashboard.form.checking}</span>
                                     </div>
                                 ) : (
                                     <>
                                         <SendIcon className="h-5 w-5" />
-                                        <span>Manifest Story</span>
+                                        <span>{t.dashboard.form.button}</span>
                                     </>
                                 )}
                             </button>
@@ -518,7 +524,7 @@ export const PromptBox = React.forwardRef<
                         <div className="rounded-[32px] p-8 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                                    Your AI-Crafted Story
+                                    {t.dashboard.result.title}
                                 </h3>
                                 <button
                                     onClick={handleCopy}
@@ -532,7 +538,7 @@ export const PromptBox = React.forwardRef<
                                         transition: "all 0.2s ease",
                                     }}
                                 >
-                                    {copied ? "✓ Copied!" : "Copy"}
+                                    {copied ? (t.dashboard.result.copied || "✓ Copied!") : (t.dashboard.result.copy || "Copy")}
                                 </button>
                             </div>
                             <div className="prose prose-invert max-w-none">

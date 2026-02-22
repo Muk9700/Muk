@@ -5,9 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { PromptBox } from '@/components/PromptArea';
 import Footer from '@/components/main/Footer';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSelector from '@/components/main/LanguageSelector';
 
 export default function DashboardPage() {
     const { user, loading, signOut } = useAuth();
+    const { t } = useLanguage();
     const router = useRouter();
     const [isProfileHovered, setIsProfileHovered] = useState(false);
 
@@ -28,7 +31,7 @@ export default function DashboardPage() {
                 color: '#ffffff',
                 fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
             }}>
-                Syncing...
+                {t.common.loading}
             </div>
         );
     }
@@ -125,6 +128,7 @@ export default function DashboardPage() {
                     alignItems: 'center',
                     gap: '12px',
                 }}>
+                    <LanguageSelector />
                     {/* Store Link Button */}
                     <button
                         onClick={() => router.push('/store')}
@@ -157,7 +161,7 @@ export default function DashboardPage() {
                         }}
                     >
                         <span style={{ fontSize: '1.2rem' }}>💎</span>
-                        <span style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Top Up</span>
+                        <span style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{t.dashboard.dialogs.topUp}</span>
                     </button>
 
                     {/* Profile Picture Button */}
@@ -234,7 +238,7 @@ export default function DashboardPage() {
                             e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
                         }}
                     >
-                        Log Out
+                        {t.common.signOut}
                     </button>
                 </div>
             </div>

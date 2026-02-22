@@ -86,7 +86,7 @@ export default function AuthPage() {
 
                         <div className="flex flex-col gap-4">
                             <h2 style={{
-                                fontSize: 'clamp(3.5rem, 8vw, 8rem)',
+                                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
                                 fontWeight: 900,
                                 color: '#ffffff',
                                 margin: 0,
