@@ -252,7 +252,7 @@ export default function Home() {
                 2. AI Manifestation
               </h3>
               <p style={{ opacity: 0.7, lineHeight: 1.7, margin: 0, fontSize: '1rem' }}>
-                Our advanced AI crafts a soul-stirring BL short story based on your creative inputs.
+                Our advanced AI crafts a soul-stirring short story based on your creative inputs.
               </p>
             </div>
 

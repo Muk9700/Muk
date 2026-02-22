@@ -75,7 +75,7 @@ export default function AuthPage() {
                                 fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
                                 textShadow: '0 2px 4px rgba(0,0,0,0.3)'
                             }}>
-                                BLUE HOUR • NOVEL AI
+                                AI STORYTELLER
                             </span>
                         </div>
 
@@ -90,7 +90,6 @@ export default function AuthPage() {
                                 fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
                                 textTransform: 'uppercase',
                             }}>
-                                BL<br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">AI NOVELIST</span>
                             </h2>
                             <div className="w-24 h-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" />
@@ -109,7 +108,7 @@ export default function AuthPage() {
 
                         {/* Theme Badges */}
                         <div className="flex flex-wrap gap-3 mt-4">
-                            {['Moonlit Romance', 'Office Secrets', 'Arcane Destiny', 'Backstage Glances'].map(theme => (
+                            {['Historical Epic', 'Corporate Mystery', 'Epic Fantasy', 'Modern Fame'].map(theme => (
                                 <span key={theme} className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-white/60 backdrop-blur-md">
                                     #{theme}
                                 </span>

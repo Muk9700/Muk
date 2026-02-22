@@ -1,13 +1,13 @@
 export const POLAR_PRODUCTS = {
     STARTER: {
-        id: "8dbb52bf-7d59-4881-bac7-2d338d928dfb",
-        name: "Ink & Parchment",
+        id: "056545bf-e8d4-4af0-afef-75f580adef4b",
+        name: "Basic Package",
         credits: 10,
         priceUSD: 2.49,
     },
     AUTHORS_CHOICE: {
-        id: "4b7b032a-a623-4b08-9e93-3530cb4003f2",
-        name: "The Masterpiece Bundle",
+        id: "a44f4c54-726e-4aac-b574-41c39e3cfc86",
+        name: "Premium Bundle",
         credits: 35,
         priceUSD: 7.49,
     },
