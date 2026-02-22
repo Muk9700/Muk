@@ -12,7 +12,8 @@ export async function POST(req: NextRequest) {
     try {
         const handler = Webhooks({
             webhookSecret: process.env.POLAR_WEBHOOK_SECRET || "",
-            onOrderCreated: async ({ payload: order }: any) => {
+            onOrderCreated: async (payload: any) => {
+                const order = payload.data;
                 console.log(`[Polar Webhook] Order created: ${order.id}`);
 
                 const userId = order.customer_external_id || order.customerExternalId || order.metadata?.userId || order.custom_field_data?.userId || order.customer_id;
