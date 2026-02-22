@@ -10,17 +10,17 @@ export default function BlueHourHero() {
     useEffect(() => setMounted(true), []);
 
     const themes = [
-        { id: 'historical', title: '사극 로맨스', subtitle: '달빛 아래 피어난 연정', color: 'from-blue-900/40 to-indigo-900/40' },
-        { id: 'office', title: '오피스 로맨스', subtitle: '빌딩 숲 사이의 비밀', color: 'from-slate-800/40 to-blue-900/40' },
-        { id: 'fantasy', title: '판타지 로맨스', subtitle: '마법과 검이 교차하는 운명', color: 'from-purple-900/40 to-fuchsia-900/40' },
-        { id: 'idol', title: '아이돌 로맨스', subtitle: '무대 뒤의 숨겨진 시선', color: 'from-pink-900/40 to-rose-900/40' },
+        { id: 'historical', title: 'Moonlit Romance', subtitle: 'A forbidden love under the ancient stars', color: 'from-blue-900/40 to-indigo-900/40' },
+        { id: 'office', title: 'Office Secrets', subtitle: 'Steamy encounters in the corporate jungle', color: 'from-slate-800/40 to-blue-900/40' },
+        { id: 'fantasy', title: 'Arcane Destiny', subtitle: 'Where magic and swords determine fate', color: 'from-purple-900/40 to-fuchsia-900/40' },
+        { id: 'idol', title: 'Backstage Glances', subtitle: 'The hidden reality behind the spotlight', color: 'from-pink-900/40 to-rose-900/40' },
     ];
 
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#0A0D14]">
             {/* Background Gradients - Blue Hour Vibe */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                {/* 메인 배경 (소설 집필하는 20대 초반 미소년 작가) */}
+                {/* Main Background */}
                 <div
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-color-dodge transition-opacity duration-1000"
                     style={{ backgroundImage: 'url("/images/hero_author_bg.webp")' }}
@@ -30,14 +30,13 @@ export default function BlueHourHero() {
                 <div className="absolute top-[20%] right-[-10%] w-[60%] h-[60%] bg-[#8b5cf6] rounded-full mix-blend-screen filter blur-[120px] opacity-15 animate-blob animation-delay-2000" />
                 <div className="absolute bottom-[-20%] left-[20%] w-[50%] h-[50%] bg-[#ec4899] rounded-full mix-blend-screen filter blur-[100px] opacity-10 animate-blob animation-delay-4000" />
 
-                {/* 별무리/입자 모방을 위한 노이즈 텍스처 */}
                 <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")' }}></div>
             </div>
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-20 lg:py-32 flex flex-col items-center text-center">
                 <div className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 backdrop-blur-md">
                     <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse shadow-[0_0_8px_rgba(129,140,248,0.8)]"></span>
-                    <span className="text-sm font-medium text-indigo-200 tracking-wider">BL 소설 AI 서비스, 블루아워</span>
+                    <span className="text-sm font-medium text-indigo-200 tracking-wider">AI-Powered BL Storytelling, Bl_ueHour</span>
                 </div>
 
                 <h1 className="text-6xl md:text-8xl font-bold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-100 to-purple-200 drop-shadow-sm" style={{ fontFamily: "'Space Grotesk', ui-sans-serif, system-ui" }}>
@@ -45,20 +44,20 @@ export default function BlueHourHero() {
                 </h1>
 
                 <p className="text-lg md:text-xl text-indigo-100/70 mb-12 max-w-2xl font-light leading-relaxed">
-                    당신이 상상하던 가장 아름다운 서사.<br className="hidden md:block" />
-                    장르와 컨셉만 선택하면 한 편의 감성적인 소설로 피어납니다.
+                    The most beautiful narratives you&apos;ve ever imagined.<br className="hidden md:block" />
+                    Simply choose a genre and concept to manifest your exclusive short story.
                 </p>
 
                 <div className="flex items-center justify-center mb-24 w-full px-4">
                     <Link href={user ? "/dashboard" : "/auth"} className="px-10 py-4 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold text-lg shadow-[0_0_40px_rgba(99,102,241,0.3)] hover:shadow-[0_0_60px_rgba(99,102,241,0.5)] transition-all transform hover:-translate-y-1 active:scale-95 text-center">
-                        내 상상력 펼치기
+                        Explore Your Imagination
                     </Link>
                 </div>
 
                 <div className="w-full text-left mb-6 px-2 flex justify-between items-end">
                     <div>
-                        <h2 className="text-2xl font-bold text-white mb-1">인기 테마 미리보기</h2>
-                        <p className="text-indigo-200/60 text-sm">Bl_ueHour 감성이 담긴 고퀄리티 웹툰 스타일 일러스트</p>
+                        <h2 className="text-2xl font-bold text-white mb-1">Popular Themes</h2>
+                        <p className="text-indigo-200/60 text-sm">Emotional BL aesthetics crafted by Bl_ueHour AI</p>
                     </div>
                 </div>
 

@@ -9,6 +9,8 @@ interface AuthContextType {
     session: Session | null;
     loading: boolean;
     signOut: () => Promise<void>;
+    credits: number | null;
+    refreshCredits: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -16,6 +18,8 @@ const AuthContext = createContext<AuthContextType>({
     session: null,
     loading: true,
     signOut: async () => { },
+    credits: null,
+    refreshCredits: async () => { },
 });
 
 export const useAuth = () => {
@@ -30,6 +34,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [session, setSession] = useState<Session | null>(null);
     const [loading, setLoading] = useState(true);
+    const [credits, setCredits] = useState<number | null>(null);
+
+    const refreshCredits = async () => {
+        if (!user) return;
+        try {
+            const res = await fetch(`/api/user/credits?userId=${user.id}&t=${Date.now()}`, {
+                cache: 'no-store'
+            });
+            const data = await res.json();
+            if (data && typeof data.credits === 'number') {
+                setCredits(data.credits);
+            }
+        } catch (err) {
+            console.error('Error refreshing credits:', err);
+        }
+    };
 
     useEffect(() => {
         // Get initial session
@@ -37,7 +57,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             .then(({ data: { session }, error }) => {
                 if (error) {
                     console.error('Error getting session:', error.message);
-                    // 세션 에러 발생 시(ex: Refresh Token 에러) 상태 초기화
                     setSession(null);
                     setUser(null);
                 } else {
@@ -63,10 +82,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return () => subscription.unsubscribe();
     }, []);
 
+    useEffect(() => {
+        if (user) {
+            refreshCredits();
+        } else {
+            setCredits(null);
+        }
+    }, [user]);
+
     const signOutUser = async () => {
         await supabase.auth.signOut();
         setUser(null);
         setSession(null);
+        setCredits(null);
     };
 
     const value = {
@@ -74,6 +102,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         session,
         loading,
         signOut: signOutUser,
+        credits,
+        refreshCredits,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

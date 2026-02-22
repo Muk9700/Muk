@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createCheckout } from '@lemonsqueezy/lemonsqueezy.js';
-import { LEMON_SQUEEZY_PRODUCTS, ProductType } from '@/lib/lemonsqueezy/config';
+import { Polar } from '@polar-sh/sdk';
+import { POLAR_PRODUCTS } from '@/lib/polar/config';
 
-// Initialize Lemon Squeezy with the API key from environment variables
-const apiKey = process.env.LEMON_SQUEEZY_API_KEY;
+// Initialize Polar with the access token from environment variables
+const polar = new Polar({
+    accessToken: process.env.POLAR_ACCESS_TOKEN || '',
+});
 
 export async function POST(req: NextRequest) {
-    if (!apiKey) {
-        return NextResponse.json({ error: 'Lemon Squeezy API key is missing' }, { status: 500 });
-    }
-
     try {
         const { productId, userId } = await req.json();
 
@@ -17,39 +15,26 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Product ID and User ID are required' }, { status: 400 });
         }
 
-        // Validate the product to ensure it matches our predefined variants
-        const productIds = Object.values(LEMON_SQUEEZY_PRODUCTS).map(p => p.id);
-        if (!productIds.includes(productId)) {
+        // Validate the product
+        const polarProduct = Object.values(POLAR_PRODUCTS).find(p => p.id === productId);
+        if (!polarProduct) {
             return NextResponse.json({ error: 'Invalid product selected' }, { status: 400 });
         }
 
-        // Must dynamically import inside the function after setting API keys, or use setup function.
-        const ls = await import('@lemonsqueezy/lemonsqueezy.js');
-        ls.lemonSqueezySetup({ apiKey });
-
-        const storeId = process.env.LEMON_SQUEEZY_STORE_ID;
-        if (!storeId) {
-            console.error('LEMON_SQUEEZY_STORE_ID is missing');
-            return NextResponse.json({ error: 'Store configuration is missing' }, { status: 500 });
-        }
-
-        // Create the checkout URL
-        const { data, error } = await ls.createCheckout(storeId, productId, {
-            checkoutData: {
-                custom: {
-                    user_id: userId,
-                },
-            },
-            expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(), // Expires in 24 hours
+        // Create the checkout session
+        const checkout = await polar.checkouts.create({
+            products: [{ productId: productId }],
+            successUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store?success=true`,
+            customerExternalId: userId,
         });
 
-        if (error) {
-            console.error('Lemon Squeezy Checkout Error:', error);
+        if (!checkout.url) {
+            console.error('Polar Checkout Error: No URL returned');
             return NextResponse.json({ error: 'Failed to create checkout session' }, { status: 500 });
         }
 
         // Return the checkout URL to redirect the user
-        return NextResponse.json({ checkoutUrl: data?.data?.attributes?.url });
+        return NextResponse.json({ checkoutUrl: checkout.url });
     } catch (err: any) {
         console.error('Checkout API Error:', err);
         return NextResponse.json({ error: err.message || 'An unexpected error occurred' }, { status: 500 });

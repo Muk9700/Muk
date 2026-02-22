@@ -5,12 +5,11 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Footer from '@/components/main/Footer';
 
 export default function Home() {
-  const { user, loading, signOut } = useAuth();
+  const { user, loading, signOut, credits } = useAuth();
   const router = useRouter();
-
-  // Redirect logic removed to allow logged-in users to visit home page via dashboard link
 
   return (
     <main style={{ position: 'relative' }}>
@@ -31,7 +30,7 @@ export default function Home() {
           fontWeight: 600,
           fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
         }}>
-          Loading...
+          Syncing...
         </div>
       ) : user ? (
         <div style={{
@@ -43,37 +42,27 @@ export default function Home() {
           alignItems: 'center',
           gap: '12px',
         }}>
-          {/* Store Button */}
-          <button
+          {/* Credit Display */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 16px',
+            borderRadius: 10,
+            background: 'rgba(99, 102, 241, 0.2)',
+            backdropFilter: 'blur(10px) saturate(120%)',
+            border: '1px solid rgba(99, 102, 241, 0.3)',
+            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.15)',
+            color: '#ffffff',
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
             onClick={() => router.push('/store')}
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 10,
-              background: 'rgba(255, 255, 255, 0.12)',
-              backdropFilter: 'blur(10px) saturate(120%)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              color: '#ffffff',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-            </svg>
-          </button>
+            <span style={{ color: '#a5b4fc' }}>💎</span>
+            <span>{credits ?? 0} Credits</span>
+          </div>
 
           {/* User Info & Logout */}
           <div style={{
@@ -87,33 +76,31 @@ export default function Home() {
             border: '1px solid rgba(255, 255, 255, 0.2)',
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
           }}>
-            {user.user_metadata?.avatar_url && (
-              <img
-                src={user.user_metadata.avatar_url}
-                alt="Profile"
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '50%',
-                  border: '2px solid rgba(255, 255, 255, 0.3)',
-                }}
-              />
-            )}
+            <img
+              src={user.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${user.email}&background=6366f1&color=fff`}
+              alt="Profile"
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+              }}
+            />
             <span style={{
               color: '#ffffff',
               fontSize: '0.9rem',
               fontWeight: 600,
               fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
             }}>
-              {user.user_metadata?.full_name || user.email}
+              {user.user_metadata?.full_name || 'User'}
             </span>
             <button
               onClick={signOut}
               style={{
                 padding: '6px 12px',
                 borderRadius: 6,
-                background: 'rgba(239, 68, 68, 0.2)',
-                border: '1px solid rgba(239, 68, 68, 0.4)',
+                background: 'rgba(239, 68, 68, 0.15)',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
                 color: '#fca5a5',
                 fontSize: '0.85rem',
                 fontWeight: 600,
@@ -122,13 +109,13 @@ export default function Home() {
                 fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.3)';
+                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.25)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)';
+                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
               }}
             >
-              Sign Out
+              Log Out
             </button>
           </div>
         </div>
@@ -141,65 +128,32 @@ export default function Home() {
           display: 'flex',
           gap: '12px',
         }}>
-          <button
-            onClick={() => router.push('/store')}
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 10,
-              background: 'rgba(255, 255, 255, 0.12)',
-              backdropFilter: 'blur(10px) saturate(120%)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              color: '#ffffff',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-            </svg>
-          </button>
           <Link
             href="/auth"
             style={{
-              padding: '10px 20px',
+              padding: '10px 24px',
               borderRadius: 10,
-              background: 'rgba(255, 255, 255, 0.12)',
-              backdropFilter: 'blur(10px) saturate(120%)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
+              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+              border: 'none',
               color: '#ffffff',
               textDecoration: 'none',
               fontSize: '0.95rem',
               fontWeight: 600,
               fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              boxShadow: '0 4px 15px rgba(99, 102, 241, 0.35)',
               transition: 'all 0.2s ease',
               display: 'inline-block',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.18)';
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.25)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(99, 102, 241, 0.45)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
               e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(99, 102, 241, 0.35)';
             }}
           >
-            Login
+            Sign In
           </Link>
         </div>
       )}
@@ -225,7 +179,7 @@ export default function Home() {
             fontSize: 'clamp(1.8rem, 4vw, 3rem)',
             fontWeight: 700,
             textAlign: 'center',
-            marginBottom: '3rem',
+            marginBottom: '4rem',
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
@@ -237,17 +191,18 @@ export default function Home() {
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '2rem',
+            gap: '3rem',
           }}>
             {/* Step 1: Input */}
             <div style={{
               background: 'rgba(255,255,255,0.03)',
-              borderRadius: 16,
-              padding: '2rem',
-              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 24,
+              padding: '2.5rem',
+              border: '1px solid rgba(255,255,255,0.06)',
               backdropFilter: 'blur(10px)',
+              textAlign: 'center',
             }}>
-              <div style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
                 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="8" y="12" width="48" height="40" rx="4" stroke="url(#grad1)" strokeWidth="2" fill="rgba(102,126,234,0.1)" />
                   <path d="M32 24L32 36M32 24L28 28M32 24L36 28" stroke="url(#grad1)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -260,23 +215,24 @@ export default function Home() {
                   </defs>
                 </svg>
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.75rem' }}>
-                1. 정보 입력
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#e0e7ff' }}>
+                1. Set the Stage
               </h3>
-              <p style={{ opacity: 0.8, lineHeight: 1.6, margin: 0 }}>
-                장르, 주인공 성격, 그리고 원하는 소설의 컨셉을 자유롭게 입력해주세요.
+              <p style={{ opacity: 0.7, lineHeight: 1.7, margin: 0, fontSize: '1rem' }}>
+                Choose your genre, protagonist's personality, and a unique concept for your story.
               </p>
             </div>
 
             {/* Step 2: AI Processing */}
             <div style={{
               background: 'rgba(255,255,255,0.03)',
-              borderRadius: 16,
-              padding: '2rem',
-              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 24,
+              padding: '2.5rem',
+              border: '1px solid rgba(255,255,255,0.06)',
               backdropFilter: 'blur(10px)',
+              textAlign: 'center',
             }}>
-              <div style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
                 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="32" cy="32" r="20" stroke="url(#grad2)" strokeWidth="2" fill="rgba(102,126,234,0.1)" />
                   <path d="M24 32C24 32 26 28 32 28C38 28 40 32 40 32" stroke="url(#grad2)" strokeWidth="2" strokeLinecap="round" />
@@ -292,23 +248,24 @@ export default function Home() {
                   </defs>
                 </svg>
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.75rem' }}>
-                2. AI 소설 생성
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#e0e7ff' }}>
+                2. AI Manifestation
               </h3>
-              <p style={{ opacity: 0.8, lineHeight: 1.6, margin: 0 }}>
-                AI 엔진이 입력된 정보를 바탕으로 감성적인 미소년 로맨스 단편 소설을 집필합니다.
+              <p style={{ opacity: 0.7, lineHeight: 1.7, margin: 0, fontSize: '1rem' }}>
+                Our advanced AI crafts a soul-stirring BL short story based on your creative inputs.
               </p>
             </div>
 
             {/* Step 3: View & Save */}
             <div style={{
               background: 'rgba(255,255,255,0.03)',
-              borderRadius: 16,
-              padding: '2rem',
-              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 24,
+              padding: '2.5rem',
+              border: '1px solid rgba(255,255,255,0.06)',
               backdropFilter: 'blur(10px)',
+              textAlign: 'center',
             }}>
-              <div style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
                 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="12" y="16" width="18" height="24" rx="2" stroke="url(#grad3)" strokeWidth="2" fill="rgba(102,126,234,0.05)" />
                   <path d="M16 22L18 20L22 24L26 20L28 22" stroke="url(#grad3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -330,16 +287,17 @@ export default function Home() {
                   </defs>
                 </svg>
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.75rem' }}>
-                3. 감상 및 저장
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#e0e7ff' }}>
+                3. Read & Cherish
               </h3>
-              <p style={{ opacity: 0.8, lineHeight: 1.6, margin: 0 }}>
-                생성된 소설을 읽고 클립보드에 복사하여 간직하세요.
+              <p style={{ opacity: 0.7, lineHeight: 1.7, margin: 0, fontSize: '1rem' }}>
+                Dive into your story, save your favorites, and share the magic with others.
               </p>
             </div>
           </div>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

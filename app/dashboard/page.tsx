@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { PromptBox } from '@/components/PromptArea';
+import Footer from '@/components/main/Footer';
 
 export default function DashboardPage() {
     const { user, loading, signOut } = useAuth();
@@ -20,14 +21,14 @@ export default function DashboardPage() {
         return (
             <div style={{
                 minHeight: '100vh',
-                background: 'transparent',
+                background: '#0A0D14',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#ffffff',
                 fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
             }}>
-                Loading...
+                Syncing...
             </div>
         );
     }
@@ -39,7 +40,7 @@ export default function DashboardPage() {
     return (
         <main style={{
             minHeight: '100vh',
-            background: 'transparent',
+            background: '#0A0D14',
             position: 'relative',
         }}>
             {/* Background Gradients */}
@@ -49,11 +50,9 @@ export default function DashboardPage() {
                 zIndex: 0,
                 background: 'linear-gradient(to bottom, #0A0D14, #10142A, #1D1739)',
             }}>
-                {/* 몽환적 블러 도형들 */}
                 <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '40%', height: '40%', background: '#3b82f6', borderRadius: '50%', filter: 'blur(120px)', opacity: 0.15 }} />
                 <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '50%', height: '50%', background: '#8b5cf6', borderRadius: '50%', filter: 'blur(150px)', opacity: 0.15 }} />
 
-                {/* 미세한 그리드 유지 */}
                 <div style={{
                     position: 'absolute',
                     inset: 0,
@@ -75,7 +74,7 @@ export default function DashboardPage() {
             }}>
                 <button
                     onClick={() => router.push('/')}
-                    title="홈으로 이동"
+                    title="Back to Home"
                     style={{
                         width: 48,
                         height: 48,
@@ -106,57 +105,59 @@ export default function DashboardPage() {
                 </button>
             </div>
 
-            {/* Profile Popover - Top Right */}
+            {/* Profile & Credits - Top Right */}
             <div
                 style={{
                     position: 'fixed',
                     top: '32px',
                     right: '32px',
                     zIndex: 100,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-end',
+                    gap: '12px',
                 }}
                 onMouseEnter={() => setIsProfileHovered(true)}
                 onMouseLeave={() => setIsProfileHovered(false)}
             >
                 <div style={{
-                    position: 'relative',
                     display: 'flex',
-                    flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '12px',
                 }}>
                     {/* Store Link Button */}
                     <button
                         onClick={() => router.push('/store')}
-                        title="크레딧 충전하기"
+                        title="Top Up Credits"
                         style={{
-                            width: 48,
                             height: 48,
+                            padding: '0 20px',
                             borderRadius: '16px',
-                            background: 'rgba(255, 255, 255, 0.12)',
+                            background: 'rgba(99, 102, 241, 0.2)',
                             backdropFilter: 'blur(10px)',
-                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                            border: '1px solid rgba(99, 102, 241, 0.3)',
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center',
+                            gap: '8px',
                             cursor: 'pointer',
-                            color: '#fbbf24', // Gold color for importance
+                            color: '#ffffff',
+                            fontWeight: 600,
                             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
                         }}
                         onMouseEnter={(e) => {
-                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-                            e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)';
-                            e.currentTarget.style.boxShadow = '0 8px 20px rgba(251, 191, 36, 0.2)';
+                            e.currentTarget.style.background = 'rgba(99, 102, 241, 0.3)';
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 8px 20px rgba(99, 102, 241, 0.2)';
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
-                            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                            e.currentTarget.style.background = 'rgba(99, 102, 241, 0.2)';
+                            e.currentTarget.style.transform = 'translateY(0)';
                             e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
                         }}
                     >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" />
-                        </svg>
+                        <span style={{ fontSize: '1.2rem' }}>💎</span>
+                        <span style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Top Up</span>
                     </button>
 
                     {/* Profile Picture Button */}
@@ -201,44 +202,40 @@ export default function DashboardPage() {
                             </div>
                         )}
                     </button>
+                </div>
 
-                    {/* Sign Out Button - appears on hover */}
-                    <div style={{
-                        opacity: isProfileHovered ? 1 : 0,
-                        transform: isProfileHovered ? 'translateY(0)' : 'translateY(-8px)',
-                        transition: 'all 0.3s ease',
-                        pointerEvents: isProfileHovered ? 'auto' : 'none',
-                    }}>
-                        <button
-                            onClick={signOut}
-                            style={{
-                                padding: '8px 16px',
-                                borderRadius: 12,
-                                background: 'rgba(239, 68, 68, 0.2)',
-                                border: '1px solid rgba(239, 68, 68, 0.4)',
-                                color: '#fca5a5',
-                                fontSize: '0.875rem',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease',
-                                fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
-                                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-                                whiteSpace: 'nowrap',
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.3)';
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.3)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)';
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
-                            }}
-                        >
-                            Sign Out
-                        </button>
-                    </div>
+                {/* Log Out Button - appears below on hover */}
+                <div style={{
+                    opacity: isProfileHovered ? 1 : 0,
+                    transform: isProfileHovered ? 'translateY(0)' : 'translateY(-8px)',
+                    transition: 'all 0.3s ease',
+                    pointerEvents: isProfileHovered ? 'auto' : 'none',
+                }}>
+                    <button
+                        onClick={signOut}
+                        style={{
+                            padding: '8px 20px',
+                            borderRadius: 12,
+                            background: 'rgba(239, 68, 68, 0.15)',
+                            border: '1px solid rgba(239, 68, 68, 0.3)',
+                            color: '#fca5a5',
+                            fontSize: '0.875rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                            fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, -apple-system",
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+                            whiteSpace: 'nowrap',
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'rgba(239, 68, 68, 0.25)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
+                        }}
+                    >
+                        Log Out
+                    </button>
                 </div>
             </div>
 
@@ -269,6 +266,7 @@ export default function DashboardPage() {
                     margin: 0;
                 }
             `}</style>
+            <Footer />
         </main>
     );
 }

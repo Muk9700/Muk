@@ -5,6 +5,7 @@ import { signInWithGoogle } from '@/lib/supabase/client';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import Footer from '@/components/main/Footer';
 
 export default function AuthPage() {
     const [isLoading, setIsLoading] = useState(false);
@@ -89,7 +90,7 @@ export default function AuthPage() {
                             textTransform: 'uppercase',
                         }}>
                             BL<br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">소설 AI</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">AI NOVELIST</span>
                         </h2>
                         <div className="w-24 h-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" />
                         <p style={{
@@ -101,15 +102,13 @@ export default function AuthPage() {
                             lineHeight: 1.6,
                             fontWeight: 300,
                         }}>
-                            <strong className="text-indigo-300 font-semibold">장르, 성격, 컨셉</strong>만 입력하면<br />
-                            당신이 꿈꾸던 <span className="underline decoration-indigo-500/50 underline-offset-4">나만의 BL 소설</span>을<br />
-                            완벽한 감성으로 완성해드립니다.
+                            Just input a <strong className="text-indigo-300 font-semibold">genre, personality, and concept</strong>, and we&apos;ll weave a soul-stirring story tailored just for you.
                         </p>
                     </div>
 
                     {/* Theme Badges */}
                     <div className="flex flex-wrap gap-3 mt-4">
-                        {['사극', '오피스', '판타지', '아이돌'].map(theme => (
+                        {['Moonlit Romance', 'Office Secrets', 'Arcane Destiny', 'Backstage Glances'].map(theme => (
                             <span key={theme} className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-white/60 backdrop-blur-md">
                                 #{theme}
                             </span>
@@ -344,6 +343,7 @@ export default function AuthPage() {
                     }
                 }
             `}</style>
+            <Footer />
         </main>
     );
 }

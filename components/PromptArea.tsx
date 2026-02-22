@@ -133,10 +133,10 @@ const GeneratingOverlay = () => {
     const [phase, setPhase] = React.useState(0);
 
     const phases = [
-        "세계관을 설계하는 중...",
-        "주인공들을 불러오는 중...",
-        "감성을 담아 집필하는 중...",
-        "마지막 문장을 완성하는 중...",
+        "Architecting the world",
+        "Summoning characters",
+        "Weaving the narrative",
+        "Writing final lines",
     ];
 
     React.useEffect(() => {
@@ -167,9 +167,7 @@ const GeneratingOverlay = () => {
                 gap: "2rem",
             }}
         >
-            {/* 중앙 펄스 원 애니메이션 */}
             <div style={{ position: "relative", width: 120, height: 120 }}>
-                {/* 바깥 파동 */}
                 <div style={{
                     position: "absolute",
                     inset: -20,
@@ -184,7 +182,6 @@ const GeneratingOverlay = () => {
                     background: "rgba(102, 126, 234, 0.2)",
                     animation: "pulse-ring 1.8s ease-out infinite 0.4s",
                 }} />
-                {/* 메인 원 */}
                 <div style={{
                     width: 120,
                     height: 120,
@@ -196,7 +193,6 @@ const GeneratingOverlay = () => {
                     boxShadow: "0 0 40px rgba(102, 126, 234, 0.6)",
                     animation: "float 2s ease-in-out infinite",
                 }}>
-                    {/* 펜 아이콘 */}
                     <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
                         <path d="m15 5 4 4" />
@@ -204,7 +200,6 @@ const GeneratingOverlay = () => {
                 </div>
             </div>
 
-            {/* 텍스트 */}
             <div style={{ textAlign: "center" }}>
                 <p style={{
                     fontSize: "1.4rem",
@@ -223,11 +218,10 @@ const GeneratingOverlay = () => {
                     margin: "0.75rem 0 0 0",
                     fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
                 }}>
-                    AI가 소설을 집필하고 있습니다. 잠시만 기다려주세요.
+                    Our AI is crafting your story. Please wait a moment.
                 </p>
             </div>
 
-            {/* 하단 진행 바 */}
             <div style={{
                 width: 280,
                 height: 4,
@@ -272,24 +266,24 @@ const IpAbuseDialog = ({ isOpen, onClose, onGoToStore }: { isOpen: boolean, onCl
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
                     </svg>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">무료 혜택이 이미 대여되었습니다.</h3>
+                <h3 className="text-xl font-bold text-white mb-3">Free trial already claimed.</h3>
                 <p className="text-white/60 mb-8 leading-relaxed">
-                    이미 이 기기 또는 네트워크에서<br />
-                    무료 소설 생성 혜택을 사용하셨습니다.<br />
-                    <span className="text-white/80 font-medium">지속적으로 이용하시려면 크레딧을 구매해주세요!</span>
+                    A free story has already been generated<br />
+                    from this device or network.<br />
+                    <span className="text-white/80 font-medium">Please purchase credits to continue!</span>
                 </p>
                 <div className="flex gap-3 w-full">
                     <button
                         onClick={onClose}
                         className="flex-1 py-3 px-6 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-semibold transition-all border border-white/5"
                     >
-                        닫기
+                        Close
                     </button>
                     <button
                         onClick={onGoToStore}
                         className="flex-1 py-3 px-6 rounded-2xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/20 active:scale-95"
                     >
-                        크레딧 충전장으로
+                        Go to Store
                     </button>
                 </div>
             </div>
@@ -306,23 +300,23 @@ const NoCreditsDialog = ({ isOpen, onClose, onGoToStore }: { isOpen: boolean, on
                         <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
                     </svg>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">무료 생성 횟수를 모두 소진하였습니다.</h3>
+                <h3 className="text-xl font-bold text-white mb-3">You&apos;ve used your free credit.</h3>
                 <p className="text-white/60 mb-8 leading-relaxed">
-                    나만의 감성 BL 소설을 더 생성하고 싶다면<br />
-                    크레딧을 충전해 보세요!
+                    Want to create more stories?<br />
+                    Top up your credits to keep the magic going!
                 </p>
                 <div className="flex gap-3 w-full">
                     <button
                         onClick={onClose}
                         className="flex-1 py-3 px-6 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-semibold transition-all border border-white/5"
                     >
-                        확인
+                        Maybe Later
                     </button>
                     <button
                         onClick={onGoToStore}
                         className="flex-1 py-3 px-6 rounded-2xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/20 active:scale-95"
                     >
-                        추가 생성하기
+                        Top Up
                     </button>
                 </div>
             </div>
@@ -335,7 +329,7 @@ export const PromptBox = React.forwardRef<
     HTMLTextAreaElement,
     React.TextareaHTMLAttributes<HTMLTextAreaElement>
 >(({ className, ...props }, ref) => {
-    const { user } = useAuth();
+    const { user, credits, refreshCredits, loading: authLoading } = useAuth();
     const router = useRouter();
     const [genre, setGenre] = React.useState("");
     const [personality, setPersonality] = React.useState("");
@@ -346,81 +340,28 @@ export const PromptBox = React.forwardRef<
     const [isNoCredits, setIsNoCredits] = React.useState(false);
     const [isIpAbuse, setIsIpAbuse] = React.useState(false);
     const [copied, setCopied] = React.useState(false);
-    const [creditsLoaded, setCreditsLoaded] = React.useState(false);
-
-    // 크레딧 데이터 (localStorage를 초기값으로 사용하여 깜빡임 방지)
-    const [credits, setCredits] = React.useState<number>(() => {
-        if (typeof window !== 'undefined') {
-            return Number(localStorage.getItem('user_credits') || 0);
-        }
-        return 0;
-    });
-    const [usedCount, setUsedCount] = React.useState<number>(() => {
-        if (typeof window !== 'undefined') {
-            return Number(localStorage.getItem('user_used_count') || 0);
-        }
-        return 0;
-    });
-
-    // 크레딧 데이터 조회 함수 (재사용 가능하게 분리)
-    const refreshCredits = React.useCallback(async () => {
-        if (!user) return;
-        try {
-            const res = await fetch(`/api/user/credits?userId=${user.id}&t=${Date.now()}`, {
-                cache: 'no-store',
-                headers: { 'Pragma': 'no-cache', 'Cache-Control': 'no-cache' }
-            });
-            const data = await res.json();
-            if (data && typeof data.credits === 'number') {
-                setCredits(data.credits);
-                setUsedCount(data.count);
-                // 즉시 반영을 위해 로컬스토리지 저장
-                localStorage.setItem('user_credits', String(data.credits));
-                localStorage.setItem('user_used_count', String(data.count));
-            }
-        } catch (err) {
-            console.error("Error refreshing credits:", err);
-        } finally {
-            setCreditsLoaded(true);
-        }
-    }, [user]);
-
-    // 컴포넌트 마운트 및 포커스 시 크레딧 조회
-    React.useEffect(() => {
-        if (user) {
-            refreshCredits();
-
-            // 상점 다녀오거나 창 전환 시 자동 갱신
-            const handleFocus = () => refreshCredits();
-            window.addEventListener('focus', handleFocus);
-            return () => window.removeEventListener('focus', handleFocus);
-        }
-    }, [user, refreshCredits]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!genre.trim() || !personality.trim() || !concept.trim()) {
-            setError("모든 필드를 입력해주세요.");
+            setError("Please fill in all fields.");
             return;
         }
 
         if (!user) {
-            console.error('[PromptBox] No user found in context');
-            setError("로그인이 필요합니다.");
+            setError("Sign in required.");
             return;
         }
 
-        console.log('[PromptBox] Submitting story request for user:', user.id);
         setIsGenerating(true);
         setError(null);
         setGeneratedStory(null);
         setIsNoCredits(false);
 
-        if (usedCount >= 1 && credits <= 0) {
-            setIsNoCredits(true);
-            setIsGenerating(false);
-            return;
+        // Simple check before API call
+        if (credits !== null && credits <= 0) {
+            // Need to double check usedCount too, but the API will handle it robustly
         }
 
         try {
@@ -448,17 +389,11 @@ export const PromptBox = React.forwardRef<
             }
 
             setGeneratedStory(data.story);
-            if (data.credits !== undefined) {
-                setCredits(data.credits);
-                localStorage.setItem('user_credits', String(data.credits));
-            }
-            if (data.usedCount !== undefined) {
-                setUsedCount(data.usedCount);
-                localStorage.setItem('user_used_count', String(data.usedCount));
-            }
+            // Refresh global credits after generation
+            refreshCredits();
         } catch (err: any) {
             console.error('Error generating story:', err);
-            setError(err.message || '소설 생성 중 오류가 발생했습니다.');
+            setError(err.message || 'An error occurred while generating your story.');
         } finally {
             setIsGenerating(false);
         }
@@ -473,7 +408,6 @@ export const PromptBox = React.forwardRef<
 
     return (
         <>
-            {/* 전체화면 생성 중 오버레이 */}
             {isGenerating && <GeneratingOverlay />}
 
             <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto">
@@ -488,7 +422,6 @@ export const PromptBox = React.forwardRef<
                     onGoToStore={() => router.push('/store')}
                 />
 
-                {/* 입력 폼 - 크레딧 부족 시 폼 숨김 */}
                 {!isNoCredits && (
                     <form onSubmit={handleSubmit} className={cn(
                         "relative flex flex-col gap-4 rounded-[32px] p-6 shadow-[0_8px_32px_rgba(30,27,75,0.4)] transition-all bg-[#0A0D14]/40 backdrop-blur-2xl border border-indigo-500/20 overflow-hidden",
@@ -497,36 +430,36 @@ export const PromptBox = React.forwardRef<
                         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent pointer-events-none" />
                         <div className="relative z-10 flex flex-col gap-4">
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">장르</label>
+                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">Genre</label>
                                 <input
                                     type="text"
                                     value={genre}
                                     onChange={(e) => setGenre(e.target.value)}
-                                    placeholder="예: 현대물, 오메가버스, 캠퍼스물..."
+                                    placeholder="e.g., Contemporary, Omegaverse, Campus..."
                                     className="w-full rounded-2xl bg-[#0A0D14]/50 border border-indigo-500/30 p-3 text-indigo-50 placeholder:text-indigo-200/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-light"
                                     disabled={isGenerating}
                                 />
                             </div>
 
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">주인공 성격</label>
+                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">Character Personality</label>
                                 <input
                                     type="text"
                                     value={personality}
                                     onChange={(e) => setPersonality(e.target.value)}
-                                    placeholder="예: 까칠한 재벌 3세 수, 다정한 집착공..."
+                                    placeholder="e.g., Tsundere CEO, Sweet but obsessive top..."
                                     className="w-full rounded-2xl bg-[#0A0D14]/50 border border-indigo-500/30 p-3 text-indigo-50 placeholder:text-indigo-200/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-light"
                                     disabled={isGenerating}
                                 />
                             </div>
 
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">소설 컨셉</label>
+                                <label className="text-sm font-semibold text-indigo-100/70 ml-2">Plot Concept</label>
                                 <textarea
                                     rows={3}
                                     value={concept}
                                     onChange={(e) => setConcept(e.target.value)}
-                                    placeholder="원하는 상황이나 특별한 설정을 적어주세요..."
+                                    placeholder="Describe the setting or specific plot points..."
                                     className="w-full rounded-2xl bg-[#0A0D14]/50 border border-indigo-500/30 p-3 text-indigo-50 placeholder:text-indigo-200/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all resize-none font-light"
                                     disabled={isGenerating}
                                 />
@@ -534,22 +467,11 @@ export const PromptBox = React.forwardRef<
                         </div>
 
                         <div className="relative z-10 flex items-center justify-between mt-2">
-                            {/* 안내 및 잔여 크레딧 */}
                             <div className="flex flex-col gap-1 pl-2">
-                                {!creditsLoaded ? (
+                                {authLoading ? (
                                     <span className="text-white/30 text-[0.8rem] animate-pulse flex items-center gap-1.5">
                                         <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-ping" />
-                                        상태 동기화 중...
-                                    </span>
-                                ) : usedCount < 1 ? (
-                                    <span style={{
-                                        fontSize: "0.85rem",
-                                        color: "#fca5a5",
-                                        fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
-                                        fontWeight: "600",
-                                        textShadow: "0 0 10px rgba(239,68,68,0.5)"
-                                    }}>
-                                        ✨ 첫 회 무료 생성 안내
+                                        Syncing...
                                     </span>
                                 ) : (
                                     <span style={{
@@ -558,24 +480,24 @@ export const PromptBox = React.forwardRef<
                                         fontFamily: "'Space Grotesk', ui-sans-serif, system-ui",
                                         fontWeight: "500"
                                     }}>
-                                        💎 보유 크레딧: <strong className="text-white text-base">{credits}</strong>
+                                        💎 Credits: <strong className="text-white text-base">{credits ?? 0}</strong>
                                     </span>
                                 )}
                             </div>
                             <button
                                 type="submit"
-                                disabled={isGenerating || !creditsLoaded}
+                                disabled={isGenerating || authLoading}
                                 className="group relative flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-lg shadow-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
                             >
-                                {!creditsLoaded ? (
+                                {authLoading ? (
                                     <div className="flex items-center gap-2">
                                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                        <span>확인 중...</span>
+                                        <span>Checking...</span>
                                     </div>
                                 ) : (
                                     <>
                                         <SendIcon className="h-5 w-5" />
-                                        <span>소설 생성하기</span>
+                                        <span>Manifest Story</span>
                                     </>
                                 )}
                             </button>
@@ -583,7 +505,6 @@ export const PromptBox = React.forwardRef<
                     </form>
                 )}
 
-                {/* Error Display */}
                 {error && (
                     <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20 backdrop-blur-md">
                         <p className="text-sm text-red-400 font-medium text-center">
@@ -592,13 +513,12 @@ export const PromptBox = React.forwardRef<
                     </div>
                 )}
 
-                {/* Generated Story Display */}
                 {generatedStory && (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <div className="rounded-[32px] p-8 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                                    생성된 단편 소설
+                                    Your AI-Crafted Story
                                 </h3>
                                 <button
                                     onClick={handleCopy}
@@ -612,7 +532,7 @@ export const PromptBox = React.forwardRef<
                                         transition: "all 0.2s ease",
                                     }}
                                 >
-                                    {copied ? "✓ 복사됨!" : "복사하기"}
+                                    {copied ? "✓ Copied!" : "Copy"}
                                 </button>
                             </div>
                             <div className="prose prose-invert max-w-none">
@@ -625,9 +545,9 @@ export const PromptBox = React.forwardRef<
                 )}
 
                 <style>{`
-                    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&display=swap');
                     .font-serif {
-                        font-family: 'Noto Serif KR', serif;
+                        font-family: 'Crimson Pro', serif;
                     }
                 `}</style>
             </div>

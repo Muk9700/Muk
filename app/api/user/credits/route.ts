@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
             count: data?.count ?? 0
         });
 
-        // 브라우저 및 CDN 캐싱 강제 방지
+        // Force prevent browser and CDN caching
         response.headers.set('Cache-Control', 'no-store, max-age=0, must-revalidate');
         response.headers.set('Pragma', 'no-cache');
         response.headers.set('Expires', '0');
