@@ -1,3 +1,4 @@
+// Version: 0.7 - Approved Organization Update
 export const POLAR_PRODUCTS = {
     STARTER: {
         id: "056545bf-e8d4-4af0-afef-75f580adef4b",
