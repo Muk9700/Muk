@@ -30,7 +30,7 @@ export const translations = {
             idol: { title: "현대의 명성", subtitle: "디지털 시대, 가려진 화려함의 대가" }
         },
         howItWorks: {
-            title: "작 작동 방식",
+            title: "작동 방식",
             step1: { title: "1. 무대 설정", desc: "장르, 주인공의 성격, 그리고 독특한 컨셉을 선택하세요." },
             step2: { title: "2. AI 발현", desc: "고도의 AI가 당신의 창의적 입력을 바탕으로 영혼을 울리는 이야기를 작성합니다." },
             step3: { title: "3. 감상 및 저장", desc: "이야기 속에 빠져보세요. 좋아하는 이야기를 저장하고 마법을 공유하세요." }
