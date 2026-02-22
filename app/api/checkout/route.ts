@@ -23,9 +23,9 @@ export async function POST(req: NextRequest) {
 
         // Create the checkout session
         const checkout = await polar.checkouts.create({
-            products: [{ productId: productId }],
+            products: [productId],
             successUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store?success=true`,
-            customerExternalId: userId,
+            metadata: { userId: userId },
         });
 
         if (!checkout.url) {
