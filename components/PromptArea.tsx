@@ -334,7 +334,7 @@ export const PromptBox = React.forwardRef<
     HTMLTextAreaElement,
     React.TextareaHTMLAttributes<HTMLTextAreaElement>
 >(({ className, ...props }, ref) => {
-    const { user, credits, refreshCredits, loading: authLoading } = useAuth();
+    const { user, credits, refreshCredits, setCredits, loading: authLoading } = useAuth();
     const { t } = useLanguage();
     const router = useRouter();
     const [genre, setGenre] = React.useState("");
@@ -366,7 +366,7 @@ export const PromptBox = React.forwardRef<
         setIsNoCredits(false);
 
         // Simple check before API call
-        if (credits !== null && credits <= 0) {
+        if (credits !== null && credits < 3) {
             // Need to double check usedCount too, but the API will handle it robustly
         }
 
@@ -395,7 +395,12 @@ export const PromptBox = React.forwardRef<
             }
 
             setGeneratedStory(data.story);
-            // Refresh global credits after generation
+
+            // Instantly update credits locally first to feel immediate without network roundtrip,
+            // then trigger background refresh to ensure sync.
+            if (data.credits !== undefined) {
+                setCredits(data.credits);
+            }
             refreshCredits();
         } catch (err: any) {
             console.error('Error generating story:', err);

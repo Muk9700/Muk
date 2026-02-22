@@ -80,8 +80,10 @@ export async function POST(request: NextRequest) {
 
         console.log(`[Generate Story] User ${userId} (IP: ${clientIp}): Count=${currentCount}, Credits=${currentCredits}`);
 
-        if (isFreeExceeded && currentCredits <= 0) {
-            console.warn(`[Generate Story] NO REDITS for ${userId}. Out of free limits and 0 credits.`);
+        const REQUIRED_CREDITS = 3;
+
+        if (isFreeExceeded && currentCredits < REQUIRED_CREDITS) {
+            console.warn(`[Generate Story] NO REDITS for ${userId}. Out of free limits and < ${REQUIRED_CREDITS} credits.`);
             return NextResponse.json(
                 {
                     error: "NO_CREDITS",
@@ -133,8 +135,8 @@ Structure the output beautifully with proper spacing and paragraphs.`;
             console.log(`[Generate Story] Using free generation for ${userId}`);
         } else {
             // Deduct purchased credit
-            newCredits = currentCredits - 1;
-            console.log(`[Generate Story] Using 1 credit for ${userId}`);
+            newCredits = currentCredits - REQUIRED_CREDITS;
+            console.log(`[Generate Story] Using ${REQUIRED_CREDITS} credit for ${userId}`);
         }
 
         const { error: updateError } = await supabaseAdmin

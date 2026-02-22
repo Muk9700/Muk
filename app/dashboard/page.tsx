@@ -9,7 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSelector from '@/components/main/LanguageSelector';
 
 export default function DashboardPage() {
-    const { user, loading, signOut } = useAuth();
+    const { user, loading, signOut, refreshCredits, credits } = useAuth();
     const { t } = useLanguage();
     const router = useRouter();
     const [isProfileHovered, setIsProfileHovered] = useState(false);
@@ -27,6 +27,8 @@ export default function DashboardPage() {
                 const addedCredits = urlParams.get('credits') || '0';
                 const msg = t.dashboard.paymentSuccess.replace('{credits}', addedCredits);
                 setTimeout(() => alert(msg), 300);
+
+                refreshCredits();
 
                 const newUrl = window.location.pathname;
                 window.history.replaceState({}, '', newUrl);
@@ -143,6 +145,29 @@ export default function DashboardPage() {
                     gap: '12px',
                 }}>
                     <LanguageSelector />
+
+                    {/* Credit Display */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px 16px',
+                        borderRadius: 10,
+                        background: 'rgba(99, 102, 241, 0.2)',
+                        backdropFilter: 'blur(10px) saturate(120%)',
+                        border: '1px solid rgba(99, 102, 241, 0.3)',
+                        boxShadow: '0 4px 12px rgba(99, 102, 241, 0.15)',
+                        color: '#ffffff',
+                        fontSize: '0.9rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                    }}
+                        onClick={() => router.push('/store')}
+                    >
+                        <span style={{ color: '#a5b4fc' }}>💎</span>
+                        <span>{credits ?? 0} {t.common.credits}</span>
+                    </div>
+
                     {/* Store Link Button */}
                     <button
                         onClick={() => router.push('/store')}

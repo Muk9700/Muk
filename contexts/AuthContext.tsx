@@ -11,6 +11,7 @@ interface AuthContextType {
     signOut: () => Promise<void>;
     credits: number | null;
     refreshCredits: () => Promise<void>;
+    setCredits: (val: number | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -20,6 +21,7 @@ const AuthContext = createContext<AuthContextType>({
     signOut: async () => { },
     credits: null,
     refreshCredits: async () => { },
+    setCredits: () => { },
 });
 
 export const useAuth = () => {
@@ -104,6 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signOut: signOutUser,
         credits,
         refreshCredits,
+        setCredits,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
