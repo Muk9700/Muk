@@ -15,7 +15,6 @@ const StorePage = () => {
     const { t } = useLanguage();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const isSuccess = searchParams.get('success') === 'true';
     const [isProcessing, setIsProcessing] = useState<PolarProductType | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -38,7 +37,8 @@ const StorePage = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     productId: product.id,
-                    userId: user.id
+                    userId: user.id,
+                    returnUrl: typeof window !== 'undefined' ? window.location.origin : ''
                 })
             });
 
@@ -103,14 +103,6 @@ const StorePage = () => {
                         {t.store.desc}
                     </p>
                 </div>
-
-                {isSuccess && (
-                    <div className="mb-8 p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-center backdrop-blur-md animate-in fade-in zoom-in duration-500">
-                        <div className="text-2xl mb-2">✨</div>
-                        <h3 className="text-lg font-bold mb-1">{t.store.successTitle}</h3>
-                        <p className="text-sm opacity-80 text-emerald-300">{t.store.successDesc}</p>
-                    </div>
-                )}
 
                 {error && (
                     <div className="mb-8 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-center text-sm font-medium backdrop-blur-sm">

@@ -82,7 +82,8 @@ export const translations = {
                 title: "당신의 AI 맞춤형 이야기",
                 copy: "복사",
                 copied: "복사됨!"
-            }
+            },
+            paymentSuccess: "결제가 성공적으로 완료되었습니다! {credits} 크레딧이 지급되었습니다."
         }
     },
     en: {
@@ -166,7 +167,8 @@ export const translations = {
                 title: "Your AI-Crafted Story",
                 copy: "Copy",
                 copied: "Copied!"
-            }
+            },
+            paymentSuccess: "Payment successfully completed! {credits} credits have been added."
         }
     },
     es: {
@@ -250,7 +252,8 @@ export const translations = {
                 title: "Tu historia creada por IA",
                 copy: "Copiar",
                 copied: "¡Copiado!"
-            }
+            },
+            paymentSuccess: "¡Pago completado con éxito! Se han añadido {credits} créditos."
         }
     }
 };

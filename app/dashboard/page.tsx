@@ -20,6 +20,20 @@ export default function DashboardPage() {
         }
     }, [user, loading, router]);
 
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('payment_success') === 'true') {
+                const addedCredits = urlParams.get('credits') || '0';
+                const msg = t.dashboard.paymentSuccess.replace('{credits}', addedCredits);
+                setTimeout(() => alert(msg), 300);
+
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, '', newUrl);
+            }
+        }
+    }, [t.dashboard.paymentSuccess]);
+
     if (loading) {
         return (
             <div style={{

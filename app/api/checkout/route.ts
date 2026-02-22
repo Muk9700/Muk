@@ -10,7 +10,7 @@ const polar = new Polar({
 
 export async function POST(req: NextRequest) {
     try {
-        const { productId, userId } = await req.json();
+        const { productId, userId, returnUrl } = await req.json();
 
         if (!productId || !userId) {
             return NextResponse.json({ error: 'Product ID and User ID are required' }, { status: 400 });
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
         // Create the checkout session
         const checkout = await polar.checkouts.create({
             products: [productId],
-            successUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store?success=true`,
+            successUrl: `${returnUrl || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/dashboard?payment_success=true&credits=${polarProduct.credits}`,
             metadata: { userId: userId },
         });
 
