@@ -1,13 +1,13 @@
 // Version: 0.7 - Approved Organization Update
 export const POLAR_PRODUCTS = {
     STARTER: {
-        id: "056545bf-e8d4-4af0-afef-75f580adef4b",
+        id: "47f3c180-bb8d-4f57-bbca-2994a19a33c2",
         name: "Basic Package",
         credits: 10,
         priceUSD: 2.49,
     },
     AUTHORS_CHOICE: {
-        id: "a44f4c54-726e-4aac-b574-41c39e3cfc86",
+        id: "2279ffc1-1ad5-40e3-8f62-25ae0f83869e",
         name: "Premium Bundle",
         credits: 35,
         priceUSD: 7.49,

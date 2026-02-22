@@ -5,6 +5,7 @@ import { POLAR_PRODUCTS } from '@/lib/polar/config';
 // Initialize Polar with the access token from environment variables
 const polar = new Polar({
     accessToken: process.env.POLAR_ACCESS_TOKEN || '',
+    server: 'sandbox',
 });
 
 export async function POST(req: NextRequest) {
