@@ -27,6 +27,8 @@ export async function POST(req: NextRequest) {
             products: [productId],
             successUrl: `${returnUrl || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/dashboard?payment_success=true&credits=${polarProduct.credits}`,
             metadata: { userId: userId },
+            customFieldData: { userId: userId },
+            externalCustomerId: userId,
         });
 
         if (!checkout.url) {

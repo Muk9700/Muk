@@ -15,9 +15,10 @@ export async function POST(req: NextRequest) {
             onOrderCreated: async ({ payload: order }: any) => {
                 console.log(`[Polar Webhook] Order created: ${order.id}`);
 
-                const userId = order.customer_external_id || order.customerExternalId;
+                const userId = order.customer_external_id || order.customerExternalId || order.metadata?.userId || order.custom_field_data?.userId || order.customer_id;
+
                 if (!userId) {
-                    console.error("No customer external ID found. Cannot assign credits.");
+                    console.error("No customer external ID found. Order keys:", Object.keys(order), "Metadata:", order.metadata);
                     return;
                 }
 
